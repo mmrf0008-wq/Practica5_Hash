@@ -3,4 +3,8 @@ project(Practica5_Hash)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Practica5_Hash main.cpp)
+add_executable(Practica5_Hash main.cpp
+        ThashArbol.cpp
+        ThashArbol.h
+        UTM.cpp
+        UTM.h)
