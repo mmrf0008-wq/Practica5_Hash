@@ -129,11 +129,15 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
 }
 
 Arbol * ThashArbol::buscar(unsigned long clave) {
+    Arbol *arbol = nullptr;
+    unsigned int pos = hash3(clave, 0);
+    arbol = &tabla[pos].dato;
 
+    return arbol;
 }
 
 bool ThashArbol::borrar(unsigned long clave) {
- //busco clave
+
 
 }
 
