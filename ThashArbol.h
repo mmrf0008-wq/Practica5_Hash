@@ -12,10 +12,10 @@ enum Estado{LIBRE,OCUPADA,DISPONIBLE};
 class Entrada {
 public:
     unsigned long clave;
-    Estado marca;
+    Estado estado;
     Arbol dato;
-    Entrada(const Estado &marca,const Arbol &dato, unsigned long clave):marca(marca),dato(dato),clave(clave){}
-    Entrada():marca(LIBRE),dato(),clave(0){}
+    Entrada(const Estado &marca,const Arbol &dato, unsigned long clave):estado(marca),dato(dato),clave(clave){}
+    Entrada():estado(LIBRE),dato(),clave(0){}
     ~Entrada(){}
 };
 class ThashArbol {
@@ -29,27 +29,34 @@ private:
     float lambda;
     vector <Entrada> tabla;
 
-    unsigned hash1(unsigned long clave, int intento);   //Función cuadrática
-    unsigned hash2(unsigned long clave, int intento);   //Función de dispersión doble
-    unsigned hash3(unsigned long clave, int intento);   //Nuestra propia función
+    unsigned int hash1(const unsigned long &clave, const int &intento);   //Función cuadrática
+    unsigned int hash2(const unsigned long &clave, const int &intento);   //Función de dispersión doble
+    unsigned int hash3(const unsigned long &clave, const int &intento);   //Función de dispersión lineal
+    unsigned int hash_auxiliar(const unsigned long &clave);  //Función auxiliar para la dispersión lineal
 
 public:
     ThashArbol() = default;
-    ThashArbol(int maxElementos, float lambda = 0.7);
-    ThashArbol(ThashArbol &orig);
-    ThashArbol &operator=(ThashArbol &thash);
+    int PrimoMayor(int numElementos);
+    ThashArbol(int numElementos, float lambda = 0.7);
+    ThashArbol(const ThashArbol &orig);
+    ThashArbol &operator=(const ThashArbol &thash);
     ~ThashArbol();
     bool insertar(unsigned long clave, const Arbol &arbol);
     Arbol* buscar(unsigned long clave);
     bool borrar(unsigned long clave);
     unsigned int numElementos();
-    int calculoPrimoMenor();
     unsigned long max_Colisiones();
     unsigned long numMax10();
     float promedioColisiones();
-    float factorCarga();
-    unsigned tamTabla();
+    float factorCarga() const;
+    unsigned tamTabla() const;
     void mostrarEstadoTabla();
+
+    //Metodos auxiliares
+    bool esPrimo(const int &num);
+    int calculoPrimoMenor();
+
+
 
 };
 

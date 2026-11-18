@@ -14,7 +14,7 @@ public:
     UTM():x(0),y(0){}
     UTM(double x, double y): x(x),y(y){}
     ~UTM();
-    double distancia2(UTM otra);
+    double distancia2(const UTM &otra);
 };
 
 
