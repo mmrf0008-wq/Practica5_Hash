@@ -28,7 +28,7 @@ unsigned int ThashArbol::hash_auxiliar(const unsigned long &clave) {
  * @param intento
  * @return
  * @pre creada la funcion de calculo del sigueinte valor primo primo
- **/
+ */
 unsigned int ThashArbol::hash2(const unsigned long &clave, const int &intento) {
     //h(x) = (h1(x) + i ⋅ h2 (x)) % t
     return (hash1(clave,intento) + intento * hash_auxiliar(clave)) % tamaf;

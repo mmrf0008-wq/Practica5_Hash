@@ -7,7 +7,11 @@
 #include <vector>
 
 #include "Arbol.h"
-enum Estado{LIBRE,OCUPADA,DISPONIBLE};
+enum Estado{
+    LIBRE //casilla nunca ocupada
+    ,OCUPADA,
+    DISPONIBLE //casilla que fue borrada, ahora disponible para insertar
+};
 
 class Entrada {
 public:

@@ -9,13 +9,17 @@
 #include <vector>
 
 #include "Parque.h"
+#include "ThashArbol.h"
+#include "CajaNido.h"
+
 using namespace std;
 class ControlParques {
 private:
     map<int, Parque> parques; //clave codigo de parque
-    vector<Especie> variantes;
-   H arboles; //la clave es assetNum
-    std::multimap<string, Arbol*> treeName;
+    map<string, Especie> variantes;
+    ThashArbol  arboles; //la clave es assetNum
+    std::multimap<string, Arbol*> treeName; //clave nombre comun
+    vector<CajaNido> nests;
 
 public:
     ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFiceroArbol);    //Hay que cargar los ficheros aqui
@@ -24,8 +28,8 @@ public:
     Parque *buscarParque(const string &nombre);
     vector<Especie>& listadoEspecieSubNombre(const string &cadena);
     vector<Especie>& getVariantes();
-    list<Parque>& getparques();
-    map<string, Arbol>& getArboles();
+    map<string, Especie>& getparques();
+    ThashArbol& getArboles();
 
 
     Arbol *buscarArbol(const string &asnum);

@@ -7,4 +7,6 @@ add_executable(Practica5_Hash main.cpp
         ThashArbol.cpp
         ThashArbol.h
         UTM.cpp
-        UTM.h)
+        UTM.h
+        ControlParques.h
+        ControlParques.cpp)
