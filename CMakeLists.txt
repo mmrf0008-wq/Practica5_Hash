@@ -4,5 +4,7 @@ project(Practica5_Hash)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Practica5_Hash main.cpp
-        Parque.h
-        ControlParques.h)
+        ThashArbol.cpp
+        ThashArbol.h
+        UTM.cpp
+        UTM.h)
