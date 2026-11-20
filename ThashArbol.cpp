@@ -128,17 +128,38 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
     return insertado;
 }
 
+//LA IA DICE QUE ESTA MAL
 Arbol * ThashArbol::buscar(unsigned long clave) {
-    Arbol *arbol = nullptr;
-    unsigned int pos = hash3(clave, 0);
-    arbol = &tabla[pos].dato;
+    int intento = 0, pos = 0;
 
-    return arbol;
+    while ( pos < tamaf ) {
+        pos = hash3(clave, intento);
+        if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
+            return &tabla[pos].dato;
+        }
+        intento++;
+    }
+
+    return nullptr;
 }
 
+//LA IA DICE QUE ESTÁ MAL
 bool ThashArbol::borrar(unsigned long clave) {
+    int intento = 0, pos = 0;
+    bool borrado = false;
 
+    while (borrado == false && pos < tamaf) {
+        pos = hash3(clave, intento);
+        if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
+            tabla[pos].clave = 0;
+            tabla[pos].estado = DISPONIBLE;
+            tamal--;
+            borrado = true;
+        }
+        intento ++;
+    }
 
+    return borrado;
 }
 
 /**
