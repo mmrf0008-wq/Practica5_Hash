@@ -12,9 +12,9 @@
 using namespace std;
 class ControlParques {
 private:
-    list<Parque> parques;
+    map<int, Parque> parques; //clave codigo de parque
     vector<Especie> variantes;
-    map<string,Arbol> arboles; //la clave es assetNum
+   H arboles; //la clave es assetNum
     std::multimap<string, Arbol*> treeName;
 
 public:
