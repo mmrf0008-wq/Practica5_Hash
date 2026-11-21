@@ -9,4 +9,9 @@ add_executable(Practica5_Hash main.cpp
         UTM.cpp
         UTM.h
         ControlParques.h
-        ControlParques.cpp)
+        ControlParques.cpp
+        CajaNido.cpp
+        Arbol.cpp
+        Parque.cpp
+        LectorCSV.cpp
+        Especie.cpp)

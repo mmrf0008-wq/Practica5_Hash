@@ -274,13 +274,14 @@ Arbol LectorCSV::leerArbol_csv(const string &linea,  vector<Especie> &especies) 
     std::replace(campos[6].begin(), campos[6].end(), ',', '.');
     std::replace(campos[7].begin(), campos[7].end(), ',', '.');
 
+
     Arbol a (
          campos[0],
          std::stoi(campos[1]),
          std::stoi(campos[2]),
          campos[3],
-         std::stoi(campos[4]),
-         campos[5],
+         std::stoi(campos[4]),              //FALLA PORQUE AHORA NO ESTÁN LOS ATRIBUTOS "X" E "Y",
+         campos[5],                         //SINO QUE SE UNIFICAN EN EL ATRIBUTO "COORDENADAS"
          std::stod(campos[6]),
          std::stod(campos[7]),
          leerMedida(campos[10]),

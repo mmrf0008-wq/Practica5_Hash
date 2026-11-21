@@ -11,9 +11,14 @@ private:
     double x;
     double y;
 public:
-    UTM():x(0),y(0){}
-    UTM(double x, double y): x(x),y(y){}
+    UTM();
+    UTM(double x, double y);
+    UTM(const UTM &orig);
     ~UTM();
+    void setx(double x);
+    void sety(double y);
+    double getx() const;
+    double gety() const;
     double distancia2(const UTM &otra);
 };
 

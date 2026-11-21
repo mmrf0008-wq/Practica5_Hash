@@ -6,7 +6,7 @@
  */
 Arbol::Arbol(): assetnum(""),num_parque(0),num_distrito(0),
                 nombre_distrito(""),num_barrio(0),nombre_barrio(""),
-                x(0),y(0),perimetro(0),altura(0),especie_arbol(nullptr),isInto(nullptr)
+                coordenadas(0,0),perimetro(0),altura(0),especie_arbol(nullptr),isInto(nullptr)
 {
 }
 
@@ -18,17 +18,16 @@ Arbol::Arbol(): assetnum(""),num_parque(0),num_distrito(0),
  * @param nombre_distrito Nombre del distrito.
  * @param num_barrio Número del barrio.
  * @param nombre_barrio Nombre del barrio.
- * @param x Coordenada X de la ubicación del árbol.
- * @param y Coordenada Y de la ubicación del árbol.
+ * @param coord Coordenadas del arbol
  * @param perimetro Perímetro del tronco del árbol.
  * @param altura Altura del árbol.
  * @param especie Puntero a la especie del árbol (el árbol pasa a ser su propietario y la libera en el destructor).
  * @param isInto Puntero al parque al que pertenece el árbol (puede ser nullptr).
  */
 Arbol::Arbol(const string &assetnum, int num_parque, int num_distrito, const string &nombre_distrito, int num_barrio,
-    const string &nombre_barrio, double x, double y, float perimetro, float altura, Especie* especie, Parque* isInto):
+    const string &nombre_barrio, const UTM &coord, float perimetro, float altura, Especie* especie, Parque* isInto):
         assetnum(assetnum),num_parque(num_parque),num_distrito(num_distrito),nombre_distrito(nombre_distrito),
-        num_barrio(num_barrio),nombre_barrio(nombre_barrio),x(x),y(y),perimetro(perimetro),altura(altura),
+        num_barrio(num_barrio),nombre_barrio(nombre_barrio),coordenadas(coord),perimetro(perimetro),altura(altura),
         especie_arbol(especie), isInto(isInto)
 {
 }
@@ -39,7 +38,7 @@ Arbol::Arbol(const string &assetnum, int num_parque, int num_distrito, const str
  */
 Arbol::Arbol(const Arbol &orig): assetnum(orig.assetnum),num_parque(orig.num_parque),num_distrito(orig.num_distrito),
                                 nombre_distrito(orig.nombre_distrito),num_barrio(orig.num_barrio),
-                                nombre_barrio(orig.nombre_barrio),x(orig.x),y(orig.y),perimetro(orig.perimetro),
+                                nombre_barrio(orig.nombre_barrio),coordenadas(orig.coordenadas),perimetro(orig.perimetro),
                                 altura(orig.altura)
 {
 	this->especie_arbol = new Especie(*orig.especie_arbol);
@@ -54,15 +53,14 @@ Arbol::Arbol(const Arbol &orig): assetnum(orig.assetnum),num_parque(orig.num_par
  * @param nombre_distrito Nombre del distrito.
  * @param num_barrio Número del barrio.
  * @param nombre_barrio Nombre del barrio.
- * @param x Coordenada X de la ubicación del árbol.
- * @param y Coordenada Y de la ubicación del árbol.
+ * @param coord Coordenadas del arbol
  * @param perimetro Perímetro del tronco del árbol.
  * @param altura Altura del árbol.
  */
 Arbol::Arbol(const string &assetnum, int num_parque, int num_distrito, const string &nombre_distrito, int num_barrio,
-	const string &nombre_barrio, double x, double y, float perimetro, float altura):
+	const string &nombre_barrio, const UTM &coord, float perimetro, float altura):
 		assetnum(assetnum),num_parque(num_parque),num_distrito(num_distrito),nombre_distrito(nombre_distrito),
-		num_barrio(num_barrio),nombre_barrio(nombre_barrio),x(x),y(y),perimetro(perimetro),altura(altura)
+		num_barrio(num_barrio),nombre_barrio(nombre_barrio),coordenadas(coord),perimetro(perimetro),altura(altura)
 {
 }
 
@@ -77,8 +75,8 @@ Arbol::~Arbol() {
     this->nombre_distrito = "";
     this->num_barrio = 0;
     this->nombre_barrio = "";
-    this->x = 0;
-    this->y = 0;
+    this->coordenadas.setx(0);
+    this->coordenadas.sety(0);
     this->perimetro = 0;
     this->altura = 0;
 	if(especie_arbol) {
@@ -112,8 +110,7 @@ Arbol & Arbol::operator=(const Arbol &arbol) {
         this->nombre_distrito = arbol.nombre_distrito;
         this->num_barrio = arbol.num_barrio;
         this->nombre_barrio = arbol.nombre_barrio;
-        this->x = arbol.x;
-        this->y = arbol.y;
+        this->coordenadas = arbol.coordenadas;
         this->perimetro = arbol.perimetro;
         this->altura = arbol.altura;
 
@@ -292,6 +289,3 @@ int Arbol::get_num_parque() const {
 
 string Arbol::getNombreCientifico() const {return this->especie_arbol->get_nombre_cientifico();
 }
-
-
-

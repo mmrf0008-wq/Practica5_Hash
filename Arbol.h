@@ -3,6 +3,7 @@
 #define PRACTICA2_EEDD_ARBOL_H
 #include <iostream>
 #include "Especie.h"
+#include "UTM.h"
 class Parque;           //El include no funciona. (Forward Declaration)
 using namespace std;
 
@@ -14,8 +15,7 @@ private:
     string nombre_distrito;
     int num_barrio;
     string nombre_barrio;
-    double x;
-    double y;
+    UTM coordenadas;
     float perimetro;
     float altura;
 
@@ -24,12 +24,12 @@ private:
 public:
     Arbol();
     Arbol(const string &assetnum, int num_parque, int num_distrito,
-        const string &nombre_distrito, int num_barrio, const string &nombre_barrio,
-        double x, double y, float perimetro, float altura, Especie *especie, Parque* isInto);
+        const string &nombre_distrito, int num_barrio, const string &nombre_barrio,const UTM &coord,
+        float perimetro, float altura, Especie *especie, Parque* isInto);
 
     Arbol(const string &assetnum, int num_parque, int num_distrito,
      const string &nombre_distrito, int num_barrio, const string &nombre_barrio,
-     double x, double y, float perimetro, float altura);
+     const UTM &coord, float perimetro, float altura);
     Arbol(const Arbol &orig);
     ~Arbol();
 
