@@ -10,7 +10,7 @@
  */
 unsigned int ThashArbol::hash1(const unsigned long &clave, const int &intento) {
 //h(x)  = ( x+i^2) %t;
-    return (clave + intento^2) % this->tamaf;
+    return (clave + (intento * intento)) % this->tamaf;
 }
 
 /**
@@ -40,19 +40,19 @@ unsigned int ThashArbol::hash2(const unsigned long &clave, const int &intento) {
  * @param intento
  * @return
  */
-unsigned int ThashArbol::hash_lineal(const unsigned long &clave, const int &intento) {
+unsigned int ThashArbol::hash_auxiliar2(const unsigned long &clave) {
 //h(x) = (x + i) % t;
-    return 1 + (clave + intento) % tamaf;
+    return primoMenor - (clave % primoMenor);
 }
 
 /**
- * @brief Segunda función de dispersión doble(usando dispersion cuadratica y lineal)
+ * @brief Segunda función de dispersión doble(usando dispersion cuadratica y un metodo auxiliar)
  * @param clave
  * @param intento
  * @return
  */
 unsigned int ThashArbol::hash3(const unsigned long &clave, const int &intento) {
-    return (hash1(clave, intento) + intento * hash_lineal(clave,intento)) % tamaf;
+    return (hash1(clave, intento) + intento * hash_auxiliar2(clave)) % tamaf;
 }
 
 /**
@@ -74,7 +74,7 @@ int ThashArbol::PrimoMayor(int numElementos) {
  * @param numElementos
  * @param lambda
  */
-ThashArbol::ThashArbol(int numElementos, float lambda):tamaf(PrimoMayor(numElementos/lambda)),lambda(lambda),tamal(numElementos),
+ThashArbol::ThashArbol(int numElementos, float lambda):tamaf(PrimoMayor(numElementos/lambda)),lambda(lambda),tamal(0),
                                                        maxColisiones(0),max10(0),sumaColisiones(0),tabla(tamaf)
 {
     primoMenor = calculoPrimoMenor();
@@ -190,7 +190,7 @@ bool ThashArbol::esPrimo(const int &num) {
     if (num <= 1) {
         return false;
     }
-    for(int i=2; i < sqrt(num); i++) {
+    for(int i=2; i * i <= num; i++) {
         if(num % i == 0) {
             return false;
         }
@@ -243,7 +243,7 @@ float ThashArbol::promedioColisiones() {
  * @return
  */
 float ThashArbol::factorCarga() const {
-    return this->lambda;
+    return (float)tamal / (float)tamaf;
 }
 
 /**

@@ -38,7 +38,7 @@ private:
     unsigned int hash3(const unsigned long &clave, const int &intento);   //Función de dispersión doble 2
 
     unsigned int hash_auxiliar1(const unsigned long &clave);  //Función auxiliar para la dispersión doble 1
-    unsigned int hash_lineal(const unsigned long &clave, const int &intento);  //Función auxiliar para dispersion doble 2
+    unsigned int hash_auxiliar2(const unsigned long &clave);  //Función auxiliar para dispersion doble 2
 
 public:
     ThashArbol() = default;
