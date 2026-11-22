@@ -1,10 +1,19 @@
 #include <iostream>
-
 #include "ThashArbol.h"
 
-int main()
-{
-    std::cout << "Hello, World!" << std::endl;
+void programa1() {
+    //CARGAR LOS DATOS DE ARBOLES DEL FICHERO
+    //EVALUAR LAS 6 COMBINACIONES POSIBLES
 
-    return 0;
+
+}
+
+void programa2() {
+
+}
+
+
+int main() {
+    programa1();
+    programa2();
 }

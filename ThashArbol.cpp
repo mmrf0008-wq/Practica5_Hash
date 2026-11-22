@@ -14,16 +14,16 @@ unsigned int ThashArbol::hash1(const unsigned long &clave, const int &intento) {
 }
 
 /**
- * @brief Metdo hash auxiliar con una funcion hash distinta para ser usada en la dispersión doble
+ * @brief Metodo hash auxiliar con una funcion hash distinta para ser usada en la dispersión doble
  * @param clave
  * @return
  */
-unsigned int ThashArbol::hash_auxiliar(const unsigned long &clave) {
+unsigned int ThashArbol::hash_auxiliar1(const unsigned long &clave) {
     return 1 + (clave % primoMenor);
 }
 
 /**
- * @brief funcion de dispersion doble
+ * @brief Primera funcion de dispersion doble (usando dispersion cuadratica y una auxiliar)
  * @param clave
  * @param intento
  * @return
@@ -31,7 +31,7 @@ unsigned int ThashArbol::hash_auxiliar(const unsigned long &clave) {
  */
 unsigned int ThashArbol::hash2(const unsigned long &clave, const int &intento) {
     //h(x) = (h1(x) + i ⋅ h2 (x)) % t
-    return (hash1(clave,intento) + intento * hash_auxiliar(clave)) % tamaf;
+    return (hash1(clave,intento) + intento * hash_auxiliar1(clave)) % tamaf;
 }
 
 /**
@@ -40,13 +40,23 @@ unsigned int ThashArbol::hash2(const unsigned long &clave, const int &intento) {
  * @param intento
  * @return
  */
-unsigned int ThashArbol::hash3(const unsigned long &clave,const int &intento) {
+unsigned int ThashArbol::hash_lineal(const unsigned long &clave, const int &intento) {
 //h(x) = (x + i) % t;
-    return (clave + intento) % tamaf;
+    return 1 + (clave + intento) % tamaf;
 }
 
 /**
- * @brief Calcula el numero primo siguiente alnumero de elementos que metemos en el vector
+ * @brief Segunda función de dispersión doble(usando dispersion cuadratica y lineal)
+ * @param clave
+ * @param intento
+ * @return
+ */
+unsigned int ThashArbol::hash3(const unsigned long &clave, const int &intento) {
+    return (hash1(clave, intento) + intento * hash_lineal(clave,intento)) % tamaf;
+}
+
+/**
+ * @brief Calcula el numero primo siguiente al numero de elementos que metemos en el vector
  * @param numElementos
  * @return
  */
@@ -115,7 +125,7 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
 
     while (insertado == false) {
         pos = hash3(clave,intento);     //Calculo una posicion aleatoria con una de las funciones hash
-        if (tabla[pos].estado == LIBRE || tabla[pos].estado == DISPONIBLE) {    //Compruebo si la posicion está libre
+        if (tabla[pos].estado == LIBRE || tabla[pos].estado == BORRADO) {    //Compruebo si la posicion está libre
             tabla[pos].dato = arbol;                            //Si lo está, inserto el nuevo dato
             tabla[pos].clave = clave;
             tabla[pos].estado = OCUPADA;        //Esta posicion pasa de LIBRE a OCUPADA
@@ -152,7 +162,7 @@ bool ThashArbol::borrar(unsigned long clave) {
         pos = hash3(clave, intento);
         if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
             tabla[pos].clave = 0;
-            tabla[pos].estado = DISPONIBLE;
+            tabla[pos].estado = BORRADO;
             tamal--;
             borrado = true;
         }

@@ -10,7 +10,7 @@
 enum Estado{
     LIBRE //casilla nunca ocupada
     ,OCUPADA,
-    DISPONIBLE //casilla que fue borrada, ahora disponible para insertar
+    BORRADO //casilla que fue borrada, ahora disponible para insertar
 };
 
 class Entrada {
@@ -34,9 +34,11 @@ private:
     vector <Entrada> tabla;
 
     unsigned int hash1(const unsigned long &clave, const int &intento);   //Función cuadrática
-    unsigned int hash2(const unsigned long &clave, const int &intento);   //Función de dispersión doble
-    unsigned int hash3(const unsigned long &clave, const int &intento);   //Función de dispersión lineal
-    unsigned int hash_auxiliar(const unsigned long &clave);  //Función auxiliar para la dispersión lineal
+    unsigned int hash2(const unsigned long &clave, const int &intento);   //Función de dispersión doble 1
+    unsigned int hash3(const unsigned long &clave, const int &intento);   //Función de dispersión doble 2
+
+    unsigned int hash_auxiliar1(const unsigned long &clave);  //Función auxiliar para la dispersión doble 1
+    unsigned int hash_lineal(const unsigned long &clave, const int &intento);  //Función auxiliar para dispersion doble 2
 
 public:
     ThashArbol() = default;
