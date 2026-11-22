@@ -5,7 +5,7 @@
 #include <iostream>
 #include <list>
 #include <sstream>
-
+#include "ControlParques.h"
 #include "Especie.h"
 
 std::size_t LectorCSV::numeroEspecies_ = 0;
@@ -342,21 +342,21 @@ bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFicher
 
         Arbol arbol = leerArbol_csv(linea, especies);
 
-        long a = (arbol.getAssetNum());
+        long a = ControlParques::djb2(arbol.getAssetNum().c_str());
        arboles.insertar(a, arbol);
-        treeName.insert(arbol.getNombreComun(),  );
+        treeName.insert({arbol.getNombreComun(), &arbol});
 
         bool ligado = false;
-        for(list<Parque>::iterator i = parques.begin(); i != parques.end() && !ligado == true; i++) { //ligamos el arbol con un parque
+        for(map<int, Parque>::iterator i = parques.begin(); i != parques.end() && !ligado == true; i++) { //ligamos el arbol con un parque
 
-            if(i->getCodigoParque() == arbol.get_num_parque()) {
+            if(i->second.getCodigoParque() == arbol.get_num_parque()) {
 
-                i->insertarArbol(&(res.first->second));
-                res.first->second.set_is_into(&(*i));
+                i->second.insertarArbol(&(arbol));
+                arbol.set_is_into(&i->second);
                 ligado = true;
             }
         }
-        if(!res.second) continue;
+       
     }
 
     return true;
