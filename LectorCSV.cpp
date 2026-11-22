@@ -21,7 +21,7 @@ std::size_t LectorCSV::filasDescartadas_ = 0;
  * @param rutaFichero Ruta del fichero CSV a leer.
  * @return true si el fichero se ha podido abrir, false en caso contrario.
  */
-bool LectorCSV::cargarEspecies(vector<Especie> &vector, const std::string& rutaFichero) {
+bool LectorCSV::cargarEspecies(map<string, Especie> &especies, const std::string& rutaFichero) {
     filasDescartadas_ = 0;
 
     std::ifstream fichero(rutaFichero);
@@ -66,10 +66,10 @@ bool LectorCSV::cargarEspecies(vector<Especie> &vector, const std::string& rutaF
         TipoPlanta p = Especie::stringtotp(tipoPlanta);
 
         Especie e(codigo, nombreComun, nombreCientifico,p);
-        vector.push_back(e);
+        especies.insert({codigo, e}); //insertamos la espcie con us codigo
 
     }
-    numeroEspecies_= vector.size();
+    numeroEspecies_= especies.size();
     return true;
 }
 
@@ -209,56 +209,32 @@ void LectorCSV::eliminarBOM(std::string& linea) {
     }
 }
 
-/**
- * @brief Muestra por pantalla los datos de una especie.
- * @param especie Especie a mostrar.
- */
+
 void LectorCSV::mostrarEspecie(const Especie& especie) {
     std::cout << " - [" << especie.get_codigo_especie() << "] " << especie.get_nombre_comun()
               << " (" << especie.get_nombre_cientifico() << ") - "
               << Especie::tptostring(especie.get_tipo_planta()) << "\n";
 }
 
-/**
- * @brief Convierte un campo de texto con una medida (perímetro o altura) a float. Admite la coma como separador decimal.
- * @param campo Texto con la medida.
- * @return Valor numérico de la medida, o -1.0 si el campo está vacío.
- * @throw std::invalid_argument Si el campo no es un número válido.
- */
+
 float LectorCSV::leerMedida(string campo) {
     std::replace(campo.begin(), campo.end(), ',', '.');
 
     return campo.empty() ? -1.0f : std::stof(campo);
 }
 
-/**
- * @brief Busca una especie por su código en un vector de especies.
- * @param cod Código de la especie a buscar.
- * @param especies Vector de especies donde buscar.
- * @return Puntero a la especie con ese código. Si no existe, la implementación actual devuelve un puntero a la última especie recorrida (nullptr solo si el vector está vacío).
- */
-Especie *LectorCSV::buscaEspecie(const string &cod, vector<Especie> &especies) {
-    Especie *e = nullptr;
-    for(int i=0; i < especies.size(); i++) {
-        e= &especies[i];
-        if(e->get_codigo_especie() == cod) {
-            return e;
-        }
+
+Especie *LectorCSV::buscaEspecie(const string &cod, map<string, Especie> &especies) {
+
+    map<string, Especie>::iterator iterator;
+    if(especies.find(cod) != especies.end()) {
+        return &iterator->second;
     }
-    return e;
+    return nullptr;
+
 }
 
-/**
- * @brief Construye un Arbol a partir de una línea del CSV de árboles (12 campos separados por ";").
- *
- * Las coordenadas (campos 6 y 7) admiten coma decimal; el perímetro y la altura son los campos 10 y 11.
- * @param linea Línea del fichero con el registro del árbol.
- * @param especies Vector de especies donde se busca la del árbol (campo 8).
- * @return Arbol por valor con su propia copia de la especie (reservada con new) y sin parque asociado (isInto = nullptr).
- * @throw std::runtime_error Si el registro está incompleto.
- * @throw std::invalid_argument Si algún campo numérico no se puede convertir.
- */
-Arbol LectorCSV::leerArbol_csv(const string &linea,  vector<Especie> &especies) {
+Arbol LectorCSV::leerArbol_csv(const string &linea, map<string, Especie> &especies) {
     std::stringstream registro(linea);
     std::string campos[12];
 
@@ -280,10 +256,10 @@ Arbol LectorCSV::leerArbol_csv(const string &linea,  vector<Especie> &especies) 
          std::stoi(campos[1]),
          std::stoi(campos[2]),
          campos[3],
-         std::stoi(campos[4]),              //FALLA PORQUE AHORA NO ESTÁN LOS ATRIBUTOS "X" E "Y",
-         campos[5],                         //SINO QUE SE UNIFICAN EN EL ATRIBUTO "COORDENADAS"
-         std::stod(campos[6]),
-         std::stod(campos[7]),
+         std::stoi(campos[4]),
+         campos[5],
+         UTM(std::stod(campos[6]),
+         std::stod(campos[7])),
          leerMedida(campos[10]),
          leerMedida(campos[11]),
          new Especie(*buscaEspecie(campos[8], especies)),
@@ -300,7 +276,7 @@ Arbol LectorCSV::leerArbol_csv(const string &linea,  vector<Especie> &especies) 
  * @param rutaFichero Ruta del fichero CSV de parques.
  * @return true si el fichero se ha podido abrir, false en caso contrario.
  */
-bool  LectorCSV::cargarParques(list<Parque> &parques, const std::string &rutaFichero) {
+bool  LectorCSV::cargarParques(map<int, Parque> &parques, const std::string &rutaFichero) {
     filasDescartadas_ = 0;
 
     std::ifstream fichero(rutaFichero);
@@ -329,7 +305,7 @@ bool  LectorCSV::cargarParques(list<Parque> &parques, const std::string &rutaFic
 
         codigo_parque = stoi(extraerCampo(linea, 0));
         nombre_parque = extraerCampo(linea, 1);
-        parques.push_back( Parque(codigo_parque,nombre_parque));
+        parques.insert({codigo_parque, Parque(codigo_parque,nombre_parque)});
 
     }
     numeroEspecies_= parques.size();
@@ -346,7 +322,7 @@ bool  LectorCSV::cargarParques(list<Parque> &parques, const std::string &rutaFic
  * @return true si la carga se ha completado.
  * @throw std::runtime_error Si no se puede abrir el fichero.
  */
-bool LectorCSV::cargosArbol(map<string,Arbol> &arboles, const std::string &rutaFichero, list<Parque> &parques, vector<Especie> &especies, multimap<string, Arbol*> &treeName) {
+bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFichero, map<int, Parque> &parques, map<string, Especie> &especies, multimap<string,Arbol*> &treeName){
 
     std::ifstream fichero(rutaFichero);
 
@@ -366,8 +342,9 @@ bool LectorCSV::cargosArbol(map<string,Arbol> &arboles, const std::string &rutaF
 
         Arbol arbol = leerArbol_csv(linea, especies);
 
-        auto res = arboles.insert({arbol.getAssetNum(), arbol});
-        treeName.insert(make_pair(res.first->second.getNombreComun(), &res.first->second));
+        long a = (arbol.getAssetNum());
+       arboles.insertar(a, arbol);
+        treeName.insert(arbol.getNombreComun(),  );
 
         bool ligado = false;
         for(list<Parque>::iterator i = parques.begin(); i != parques.end() && !ligado == true; i++) { //ligamos el arbol con un parque

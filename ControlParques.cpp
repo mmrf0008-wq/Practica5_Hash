@@ -39,9 +39,9 @@ ControlParques::~ControlParques() {
 
 
 Parque * ControlParques::buscarParque(const string &nombre) {
-	for(list<Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
-		if(i->getNombreParque() == nombre) {
-			return &i.operator*();
+	for(map<int,Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
+		if(i->second.getNombreParque() == nombre) {
+			return &i->second;
 		}
 	}
 	return nullptr;
@@ -51,42 +51,42 @@ Parque * ControlParques::buscarParque(const string &nombre) {
 vector<Especie> & ControlParques::listadoEspecieSubNombre(const string &cadena) {
 
 	vector<Especie> *listad = new vector<Especie>();
-	for(int i =0; i < this->variantes.size(); i++) {
-		if(this->variantes[i].get_nombre_cientifico().find(cadena)) {
-			listad->push_back(this->variantes[i]);
+	for(map<string,Especie>::iterator i = this->variantes.begin(); i != this->variantes.end(); i++) {
+		if(i->second.get_nombre_cientifico().find(cadena)){
+			listad->push_back(i->second);
 		}
 	}
 	return *listad;
 }
 
 
-vector<Especie> & ControlParques::getVariantes() {
+map<string, Especie> & ControlParques::getVariantes() {
 	return this->variantes;
 }
 
 
-list<Parque> & ControlParques::getparques() {
+map<int,Parque> & ControlParques::getparques() {
 	return this->parques;
 }
 
 
-map<string,Arbol> & ControlParques::getArboles() {
+ThashArbol & ControlParques::getArboles() {
 	return this->arboles;
 }
 
 
 Arbol *ControlParques::buscarArbol(const string &asnum) {
-	map<string,Arbol>::iterator iterator=this->arboles.find(asnum);
+	/*map<string,Arbol>::iterator iterator=this->arboles.find(asnum);
 	if(iterator == this->arboles.end()) return nullptr; //no se encontro
-	return &iterator->second;
+	return &iterator->second;*/
 }
 
 
 void ControlParques::eliminarParque(const string &nombre) {
 	bool terminar = false;
 
-	for(list<Parque>::iterator i= this->parques.begin(); i!=this->parques.end() &&!terminar; i++) {
-		if(i->getNombreParque() == nombre) {
+	for(map<int,Parque>::iterator i= this->parques.begin(); i!=this->parques.end() &&!terminar; i++) {
+		if(i->second.getNombreParque() == nombre) {
 			this->parques.erase(i);
 			terminar=true;
 		}
@@ -96,11 +96,11 @@ void ControlParques::eliminarParque(const string &nombre) {
 
 vector<Arbol*> * ControlParques::listaArbolesParque(const string &nombre_parque) {
 
-	for(list<Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
-		if(i->getNombreParque() == nombre_parque) {
-			i->ordenaArboles();
+	for(map<int,Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
+		if(i->second.getNombreParque() == nombre_parque) {
+			i->second.ordenaArboles();
 
-			return &i->get_contenedor();
+			return &i->second.get_contenedor();
 		}
 	}
 	return nullptr;
@@ -130,9 +130,9 @@ Arbol *ControlParques::getArbolMasAlto() {
 	Arbol *encontrado = nullptr;
 	Arbol *aux; 
 
-	for(list<Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
+	for(map<int,Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
 
-		aux = i->arbolMasAlto();
+		aux = i->second.arbolMasAlto();
 		if((aux ) && (!encontrado || aux->get_altura() > encontrado->get_altura())) {
 			encontrado = aux;
 		}
@@ -162,9 +162,9 @@ unsigned int ControlParques::contarTipos() {
 
 	vector<TipoPlanta> encontradas;
 	TipoPlanta aux;
-	for (list<Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++ ){
-		for(int j=0; j < i->get_contenedor().size(); j++ ) {
-			aux = Especie::stringtotp(  i->get_contenedor()[j]->getTipoEspecie());
+	for (map<int, Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++ ){
+		for(int j=0; j < i->second.get_contenedor().size(); j++ ) {
+			aux = Especie::stringtotp(  i->second.get_contenedor()[j]->getTipoEspecie());
 			if( !buscar_tipo_planta(aux, encontradas) && aux != TipoPlanta::NONE) {
 				encontradas.push_back(aux);
 			}
@@ -180,15 +180,15 @@ list<Parque>* ControlParques::listarParqueArbol(string nombre_comun) {
 	bool hay = false;
 
 	//recorremos los parques
-	for(list<Parque>::iterator i = this->parques.begin(); i!= this->parques.end(); i++) {
+	for(map<int, Parque>::iterator i = this->parques.begin(); i!= this->parques.end(); i++) {
 		hay = false;
 		//recorremos los arboles dentro de los parques
-		for(vector<Arbol*>::iterator j = i->get_contenedor().begin(); j != i->get_contenedor().end() && !hay; j++ ) {
+		for(vector<Arbol*>::iterator j = i->second.get_contenedor().begin(); j != i->second.get_contenedor().end() && !hay; j++ ) {
 			if((j.operator*()->getNombreComun() == nombre_comun) ) {
 				hay = true;
 			}
 		}
-		if(hay) encontrados->push_back(*i);
+		if(hay) encontrados->push_back(i->second);
 	}
 	if(encontrados->size() >0) return  encontrados;
 
@@ -198,20 +198,20 @@ list<Parque>* ControlParques::listarParqueArbol(string nombre_comun) {
 
 vector<Arbol *>* ControlParques::buscarArbolNombreComun(string nombre_comun) {
 	vector<Arbol*> *encontrados = new vector<Arbol *>();
-
+/*
 	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
 		if(i->second.getNombreComun() == nombre_comun) {
 			encontrados->push_back(new Arbol(i->second));
 		}
 	}
-	if(encontrados->size() >0) return encontrados;
+	if(encontrados->size() >0) return encontrados;*/
 
 	return nullptr;
 }
 
 vector<Arbol*> *ControlParques::buscarArbolNombreComunComienzo(string ncomun) {
 
-	vector<Arbol*> *encontrados = new vector<Arbol *>();
+	/*vector<Arbol*> *encontrados = new vector<Arbol *>();
 
 	string aux;
 	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
@@ -222,7 +222,7 @@ vector<Arbol*> *ControlParques::buscarArbolNombreComunComienzo(string ncomun) {
 			encontrados->push_back(new Arbol(i->second));
 		}
 	}
-	if(encontrados->size() >0) return encontrados;
+	if(encontrados->size() >0) return encontrados;*/
 
 	return nullptr;
 }
@@ -233,11 +233,7 @@ int ControlParques::contarArbolesBarrio(int num_barrio) {
 	int contador=0;
 
 	//recorremos todos los arboles
-	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
-		if(i->second.get_num_barrio() == num_barrio) {
-			contador++;
-		}
-	}
+
 	return contador;
 }
 
@@ -252,12 +248,19 @@ void ControlParques::ordenarEspecies() {
 
 Especie * ControlParques::especieMasComunEnParque(const string &nombreParque) {
 
-	for(list<Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
-		if(i->getNombreParque() == nombreParque) {
-			return i->especieMasComun();
+	for(map<int, Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
+		if(i->second.getNombreParque() == nombreParque) {
+			return i->second.especieMasComun();
 		}
 	}
 	return nullptr;
+}
+
+unsigned long ControlParques::djb2(const char *str) {
+	unsigned long hash = 5381;
+	int c;
+	while (c = *str++) hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	return hash;
 }
 
 
@@ -265,14 +268,6 @@ list<Arbol*> *ControlParques::buscarArbolesPorEspecieYDistrito(const string &nom
 	list<Arbol *> *lista = new list<Arbol *>();
 
 
-
-
-
-	for (map<string,Arbol>::iterator i= arboles.begin(); i != arboles.end(); i++) {
-		if (i->second.getNombreComun() == nombreComun && i->second.getNumDistrito() == numDistrito) {
-			lista->push_back(&i->second);
-		}
-	}
 	return lista;
 }
 

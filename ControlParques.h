@@ -16,7 +16,7 @@ using namespace std;
 class ControlParques {
 private:
     map<int, Parque> parques; //clave codigo de parque
-    map<string, Especie> variantes;
+    map<string, Especie> variantes; //clave codigo especies
     ThashArbol  arboles; //la clave es assetNum
     std::multimap<string, Arbol*> treeName; //clave nombre comun
     vector<CajaNido> nests;
@@ -27,8 +27,8 @@ public:
 
     Parque *buscarParque(const string &nombre);
     vector<Especie>& listadoEspecieSubNombre(const string &cadena);
-    vector<Especie>& getVariantes();
-    map<string, Especie>& getparques();
+    map<string,Especie>& getVariantes();
+    map<int, Parque>& getparques();
     ThashArbol& getArboles();
 
 
@@ -50,6 +50,7 @@ public:
     void ordenarEspecies();
 
     Especie* especieMasComunEnParque(const string &nombreParque);
+    static unsigned long djb2(const char* str);
 
     list<Arbol*> *buscarArbolesPorEspecieYDistrito(const string &nombreComun, int numDistrito);
 
