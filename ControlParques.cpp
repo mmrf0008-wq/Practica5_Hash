@@ -76,9 +76,7 @@ ThashArbol & ControlParques::getArboles() {
 
 
 Arbol *ControlParques::buscarArbol(const string &asnum) {
-	/*map<string,Arbol>::iterator iterator=this->arboles.find(asnum);
-	if(iterator == this->arboles.end()) return nullptr; //no se encontro
-	return &iterator->second;*/
+	return this->arboles.buscar(djb2(asnum.c_str()));
 }
 
 
@@ -184,7 +182,7 @@ list<Parque>* ControlParques::listarParqueArbol(string nombre_comun) {
 		hay = false;
 		//recorremos los arboles dentro de los parques
 		for(vector<Arbol*>::iterator j = i->second.get_contenedor().begin(); j != i->second.get_contenedor().end() && !hay; j++ ) {
-			if((j.operator*()->getNombreComun() == nombre_comun) ) {
+			if(j.operator*()->getNombreComun() == nombre_comun ) {
 				hay = true;
 			}
 		}
@@ -197,7 +195,7 @@ list<Parque>* ControlParques::listarParqueArbol(string nombre_comun) {
 
 
 vector<Arbol *>* ControlParques::buscarArbolNombreComun(string nombre_comun) {
-	vector<Arbol*> *encontrados = new vector<Arbol *>();
+	//vector<Arbol*> *encontrados = new vector<Arbol *>();
 /*
 	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
 		if(i->second.getNombreComun() == nombre_comun) {
@@ -233,6 +231,10 @@ int ControlParques::contarArbolesBarrio(int num_barrio) {
 	int contador=0;
 
 	//recorremos todos los arboles
+	for(int i =0; i < this->arboles.numElementos(); i++) {
+
+	}
+
 
 	return contador;
 }

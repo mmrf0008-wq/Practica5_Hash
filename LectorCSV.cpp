@@ -356,7 +356,7 @@ bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFicher
                 ligado = true;
             }
         }
-       
+
     }
 
     return true;
