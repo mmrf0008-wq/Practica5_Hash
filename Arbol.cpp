@@ -287,3 +287,7 @@ int Arbol::get_num_parque() const {
 
 string Arbol::getNombreCientifico() const {return this->especie_arbol->get_nombre_cientifico();
 }
+
+string Arbol::getNombreDistrito() const {
+    return nombre_distrito;
+}

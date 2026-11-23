@@ -6,6 +6,7 @@
 #define PRACTICA2_EEDD_CONTROLPARQUESH
 #include <list>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "Parque.h"
@@ -19,7 +20,7 @@ private:
     map<string, Especie> variantes; //clave codigo especies
     ThashArbol  arboles; //la clave es assetNum
     std::multimap<string, Arbol*> treeName; //clave nombre comun
-    vector<CajaNido> nests;
+    vector<CajaNido> nidos;
 
 public:
     ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFiceroArbol);    //Hay que cargar los ficheros aqui
@@ -32,7 +33,6 @@ public:
     ThashArbol& getArboles();
 
 
-    Arbol *buscarArbol(const string &asnum);
     void eliminarParque(const string &nombre);
     vector<Arbol*>* listaArbolesParque(const string &nombre_parque);
     vector<Arbol*>& buscarArbolesRango(const string &asNumMin, const string &asNumMax);
@@ -50,10 +50,15 @@ public:
     void ordenarEspecies();
 
     Especie* especieMasComunEnParque(const string &nombreParque);
-    static unsigned long djb2(const char* str);
 
     list<Arbol*> *buscarArbolesPorEspecieYDistrito(const string &nombreComun, int numDistrito);
 
+    //Practica tabla hash
+    Arbol *buscarArbol(const string &asnum);
+    set<Arbol*> arbolesCajaDistrito(const string& ndistrito);
+    unsigned int contarCajasEnArbol();
+    vector<CajaNido*> cajasEnDistrito(const string& nbre_distrito);
+    static unsigned long djb2(const char* str);
 
 };
 

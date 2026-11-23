@@ -69,6 +69,7 @@ public:
     Parque * get_is_into() const;
 
     void set_is_into(Parque *is_into);
+    string getNombreDistrito() const;
 };
 
 

@@ -5,6 +5,7 @@
 #include "ControlParques.h"
 #include <algorithm>
 #include <ranges>
+#include <set>
 
 #include "LectorCSV.h"
 
@@ -232,7 +233,7 @@ int ControlParques::contarArbolesBarrio(int num_barrio) {
 
 	//recorremos todos los arboles
 	for(int i =0; i < this->arboles.numElementos(); i++) {
-
+		//TERMINAR METODO
 	}
 
 
@@ -269,7 +270,55 @@ unsigned long ControlParques::djb2(const char *str) {
 list<Arbol*> *ControlParques::buscarArbolesPorEspecieYDistrito(const string &nombreComun, int numDistrito) {
 	list<Arbol *> *lista = new list<Arbol *>();
 
-
+	//TERMINAR METODO
 	return lista;
 }
 
+/**
+* @brief Devuelve todos los árboles del distrito indicado que tengan al menos una caja nido asociada.
+ * @param ndistrito
+ * @return
+ */
+set<Arbol*> ControlParques::arbolesCajaDistrito(const string& ndistrito) {
+	set<Arbol*> arbolesConCaja;
+	for (int i = 0; i < nidos.size(); i++) {
+		if (nidos[i].getArbol() != nullptr && nidos[i].getArbol()->getNombreDistrito() == ndistrito) {
+			arbolesConCaja.insert(nidos[i].getArbol());
+		}
+	}
+
+	return arbolesConCaja;
+}
+
+/**
+ * @brief Cuenta cuantas cajasNido estan asociadas a un arbol
+ * @return
+ */
+unsigned int ControlParques::contarCajasEnArbol() {
+	unsigned int contador = 0;
+
+	for (int i = 0; i < nidos.size(); i++) {
+		if (nidos[i].estaEnArbol() == true) {
+			contador++;
+		}
+	}
+
+	return contador;
+}
+
+/**
+* @brief Devuelve todas las cajas nido ubicadas en el distrito indicado
+ * @param nbre_distrito
+ * @return
+ */
+vector<CajaNido*> ControlParques::cajasEnDistrito(const string& nbre_distrito) {
+	vector<CajaNido*> vectorNidos;
+
+	for (int i = 0; i < nidos.size(); i++) {
+		if (nidos[i].getDistrito() == nbre_distrito) {
+			vectorNidos.push_back(&nidos[i]);
+		}
+	}
+
+	return vectorNidos;
+}
