@@ -10,7 +10,7 @@
 #include "LectorCSV.h"
 
 
-ControlParques::ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFicheroArboles) {
+ControlParques::ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFicheroArboles, const string &nomFicheroNido) {
 	if(nomFichEspecies.empty() || nomFichParques.empty()) {
 		throw invalid_argument("[ControlParques]: parametros no validos ");
 	}
@@ -28,6 +28,10 @@ ControlParques::ControlParques(const string &nomFichEspecies, const string &nomF
 	cout << "cargados los parques" << endl;
 	if(!a.cargosArbol(this->arboles, nomFicheroArboles, this->parques, this->variantes,treeName)) { // lectura de arboles y ligue entre arbol y parque
 		throw std::runtime_error("[ControlParques:cargaArboles]: error al abrir fichero ");
+	}
+
+	if(!LectorCSV::cargarNido()) {
+		throw std::runtime_error("[ControlParques:cargaNido]: error al abrir fichero ");
 	}
 	cout << "Cargados los arboles" << endl;
 
