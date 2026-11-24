@@ -196,32 +196,32 @@ list<Parque>* ControlParques::listarParqueArbol(string nombre_comun) {
 
 
 vector<Arbol *>* ControlParques::buscarArbolNombreComun(string nombre_comun) {
-	//vector<Arbol*> *encontrados = new vector<Arbol *>();
-/*
-	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
-		if(i->second.getNombreComun() == nombre_comun) {
-			encontrados->push_back(new Arbol(i->second));
+	vector<Arbol*> *encontrados = new vector<Arbol *>();
+
+	for(multimap<string,Arbol*>::iterator i = this->treeName.begin(); i != this->treeName.end(); i++) {
+		if(i->second->getNombreComun() == nombre_comun) {
+			encontrados->push_back(new Arbol(*i->second));
 		}
 	}
-	if(encontrados->size() >0) return encontrados;*/
+	if(encontrados->size() >0) return encontrados;
 
 	return nullptr;
 }
 
 vector<Arbol*> *ControlParques::buscarArbolNombreComunComienzo(string ncomun) {
 
-	/*vector<Arbol*> *encontrados = new vector<Arbol *>();
+	vector<Arbol*> *encontrados = new vector<Arbol *>();
 
 	string aux;
-	for(map<string,Arbol>::iterator i = this->arboles.begin(); i != this->arboles.end(); i++) {
+	for(multimap<string,Arbol*>::iterator i = this->treeName.begin(); i != this->treeName.end(); i++) {
 
-		size_t pos = i->second.getNombreComun().find(" ");
-		aux = i->second.getNombreComun().substr(0, pos);
+		size_t pos = i->second->getNombreComun().find(" ");
+		aux = i->second->getNombreComun().substr(0, pos);
 		if(aux == ncomun) {
-			encontrados->push_back(new Arbol(i->second));
+			encontrados->push_back(new Arbol(*i->second));
 		}
 	}
-	if(encontrados->size() >0) return encontrados;*/
+	if(encontrados->size() >0) return encontrados;
 
 	return nullptr;
 }
@@ -232,10 +232,11 @@ int ControlParques::contarArbolesBarrio(int num_barrio) {
 	int contador=0;
 
 	//recorremos todos los arboles
-	for(int i =0; i < this->arboles.numElementos(); i++) {
-		//TERMINAR METODO
+	for(multimap<string,Arbol*>::iterator i = this->treeName.begin(); i != this->treeName.end(); i++) {
+		if(i->second->get_num_barrio() == num_barrio) {
+			contador++;
+		}
 	}
-
 
 	return contador;
 }
@@ -270,7 +271,11 @@ unsigned long ControlParques::djb2(const char *str) {
 list<Arbol*> *ControlParques::buscarArbolesPorEspecieYDistrito(const string &nombreComun, int numDistrito) {
 	list<Arbol *> *lista = new list<Arbol *>();
 
-	//TERMINAR METODO
+	for(multimap<string,Arbol*>::iterator i = this->treeName.begin(); i != this->treeName.end(); i++) {
+		if(i->second->getNombreComun() == nombreComun && i->second->getNumDistrito() == numDistrito) {
+			lista->push_back(i->second);
+		}
+	}
 	return lista;
 }
 
