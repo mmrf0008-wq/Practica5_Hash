@@ -46,7 +46,7 @@ unsigned int ThashArbol::hash_auxiliar2(const unsigned long &clave) {
 }
 
 /**
- * @brief Segunda función de dispersión doble(usando dispersion cuadratica y un metodo auxiliar)
+ * @brief Segunda función de dispersión doble(usando dispersion cuadratica y un metodo auxiliarw)
  * @param clave
  * @param intento
  * @return
@@ -138,11 +138,10 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
     return insertado;
 }
 
-//LA IA DICE QUE ESTA MAL
 Arbol * ThashArbol::buscar(unsigned long clave) {
     int intento = 0, pos = 0;
 
-    while ( pos < tamaf ) {
+    while ( pos < tamaf && tabla[pos].estado != LIBRE) {
         pos = hash3(clave, intento);
         if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
             return &tabla[pos].dato;
@@ -153,23 +152,21 @@ Arbol * ThashArbol::buscar(unsigned long clave) {
     return nullptr;
 }
 
-//LA IA DICE QUE ESTÁ MAL
 bool ThashArbol::borrar(unsigned long clave) {
     int intento = 0, pos = 0;
-    bool borrado = false;
 
-    while (borrado == false && pos < tamaf) {
+    while (pos < tamaf && tabla[pos].estado != LIBRE) {
         pos = hash3(clave, intento);
         if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
             tabla[pos].clave = 0;
             tabla[pos].estado = BORRADO;
             tamal--;
-            borrado = true;
+            return true;
         }
         intento ++;
     }
 
-    return borrado;
+    return false;
 }
 
 /**
