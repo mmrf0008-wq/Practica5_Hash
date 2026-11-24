@@ -46,7 +46,7 @@ int main() {
 
         cout << "\nPROGRAMA DE PRUEBA 2\n";
 
-        cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
+       /* cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
         const string ARBOLES_APARTADO_1[] = {"6925456", "6635839", "5222166"};
         for (const string &assetnum: ARBOLES_APARTADO_1) {
             Arbol *arbol = control.buscarArbol(assetnum);
@@ -124,11 +124,11 @@ int main() {
         //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
         cout << "\nREDISPERSIÓN DE LA TABLA\n";
         control.redispersar(static_cast<unsigned>(control.getTamTabla() * 1.3));
-        control.mostrarEstadoTabla();
+        control.mostrarEstadoTabla();*/
     } catch (const std::exception &error) {
         std::cerr << "\nError: " << error.what() << '\n';
         return 1;
     }
 
     return 0;
-};
+}

@@ -123,8 +123,12 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
     bool insertado = false;
     int intento = 0, pos = 0;
 
-    while (insertado == false) {
+    while (!this->tabla.empty() && insertado == false) {
         pos = hash3(clave,intento);     //Calculo una posicion aleatoria con una de las funciones hash
+
+        if(tabla[pos].estado == OCUPADA && tabla[pos].dato.getAssetNum() == arbol.getAssetNum()) {
+            return false;
+        }
         if (tabla[pos].estado == LIBRE || tabla[pos].estado == BORRADO) {    //Compruebo si la posicion está libre
             tabla[pos].dato = arbol;                            //Si lo está, inserto el nuevo dato
             tabla[pos].clave = clave;
@@ -134,7 +138,9 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
         } else {
             intento++;      //Si no está libre, incrementamos el intento y volvemos a realizar el calculo de la posicion
         }
+        this->sumaColisiones += intento; //aumentamos las colisiones
     }
+
     return insertado;
 }
 

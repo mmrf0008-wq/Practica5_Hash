@@ -226,8 +226,8 @@ float LectorCSV::leerMedida(string campo) {
 
 Especie *LectorCSV::buscaEspecie(const string &cod, map<string, Especie> &especies) {
 
-    map<string, Especie>::iterator iterator;
-    if(especies.find(cod) != especies.end()) {
+    map<string, Especie>::iterator iterator = especies.find(cod);
+    if(iterator != especies.end()) {
         return &iterator->second;
     }
     return nullptr;
@@ -250,6 +250,7 @@ Arbol LectorCSV::leerArbol_csv(const string &linea, map<string, Especie> &especi
     std::replace(campos[6].begin(), campos[6].end(), ',', '.');
     std::replace(campos[7].begin(), campos[7].end(), ',', '.');
 
+    Especie *e = buscaEspecie(campos[8], especies);
 
     Arbol a (
          campos[0],
@@ -262,7 +263,7 @@ Arbol LectorCSV::leerArbol_csv(const string &linea, map<string, Especie> &especi
          std::stod(campos[7])),
          leerMedida(campos[10]),
          leerMedida(campos[11]),
-         new Especie(*buscaEspecie(campos[8], especies)),
+         new Especie(*e),
          nullptr);                                          //El arbol se carga luego en cargosArbol
 
     return  a;
@@ -360,4 +361,48 @@ bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFicher
     }
 
     return true;
+}
+
+bool LectorCSV::cargarNido(const string &ficheroNido, vector<CajaNido> nidos) {
+    filasDescartadas_ = 0;
+
+    std::ifstream fichero(ficheroNido);
+    if (!fichero.is_open()) {
+        return false;
+    }
+
+    std::string linea;
+    if (std::getline(fichero, linea)) {
+        eliminarBOM(linea);
+    }
+
+    //Declaradas fuera del bucle por eficiencia
+
+    while (std::getline(fichero, linea)) {
+        if (linea.empty()) {
+            continue;
+        }
+        if (contarCampos(linea) < 2) {
+            ++filasDescartadas_;
+            continue;
+        }
+
+        string distrito;
+        string barrio;
+        string ubicacion;
+        UTM coordenadas;
+
+
+        distrito = extraerCampo(linea, 0);
+        barrio = extraerCampo(linea,1);
+        ubicacion = extraerCampo(linea, 2);
+        coordenadas = UTM(stof(extraerCampo(linea,3)),stof(extraerCampo(linea,4))) ;
+
+        CajaNido nido(distrito, barrio, ubicacion, coordenadas, nullptr);
+
+        nidos.push_back(nido);
+    }
+
+    return true;
+
 }

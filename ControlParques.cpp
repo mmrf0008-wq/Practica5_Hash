@@ -18,22 +18,24 @@ ControlParques::ControlParques(const string &nomFichEspecies, const string &nomF
 		throw std::runtime_error("[ControlParques:cargaEspecies]: error al abrir fichero ");
 	}
 	cout << "cargadas las especies " << endl;
-	  ordenarEspecies();   //ordenamos por id de menor
 
 	LectorCSV a;
 
 	if(!LectorCSV::cargarParques(this->parques, nomFichParques)) {
 		throw std::runtime_error("[ControlParques:cargaParques]: error al abrir fichero ");
 	}
+	this->arboles = ThashArbol(134449, 0.75); //ESTABLECEMOS EL FACTOR CARTA Y LA CANT DE ELEMENTOS
+
 	cout << "cargados los parques" << endl;
 	if(!a.cargosArbol(this->arboles, nomFicheroArboles, this->parques, this->variantes,treeName)) { // lectura de arboles y ligue entre arbol y parque
 		throw std::runtime_error("[ControlParques:cargaArboles]: error al abrir fichero ");
 	}
+	cout << "Cargados los arboles" << endl;
 
-	if(!LectorCSV::cargarNido()) {
+	if(!LectorCSV::cargarNido(nomFicheroNido, this->nidos)) {
 		throw std::runtime_error("[ControlParques:cargaNido]: error al abrir fichero ");
 	}
-	cout << "Cargados los arboles" << endl;
+	cout << "Cargados los nidos" << endl;
 
 }
 

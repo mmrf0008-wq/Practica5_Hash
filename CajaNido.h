@@ -14,6 +14,7 @@ private:
     string ubicacion;
     UTM coordenadas;
     Arbol *itsTree;
+
 public:
     CajaNido();
     CajaNido(const string &distrito,const string &barrio,const string &ubicacion,const UTM &coordenadas,Arbol *itsTree);

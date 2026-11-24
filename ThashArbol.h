@@ -43,7 +43,7 @@ private:
 public:
     ThashArbol() = default;
     int PrimoMayor(int numElementos);
-    ThashArbol(int numElementos, float lambda = 0.7);
+    ThashArbol(int numElementos, float lambda = 0.75);
     ThashArbol(const ThashArbol &orig);
     ThashArbol &operator=(const ThashArbol &thash);
     ~ThashArbol();
