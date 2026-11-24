@@ -291,3 +291,7 @@ string Arbol::getNombreCientifico() const {return this->especie_arbol->get_nombr
 string Arbol::getNombreDistrito() const {
     return nombre_distrito;
 }
+
+UTM Arbol::getCoordenadas() const {
+    return coordenadas;
+}

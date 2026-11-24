@@ -70,7 +70,9 @@ public:
 
     void set_is_into(Parque *is_into);
     string getNombreDistrito() const;
-};
 
+    UTM getCoordenadas() const;
+
+};
 
 #endif //PRACTICA2_EEDD_ARBOL_H

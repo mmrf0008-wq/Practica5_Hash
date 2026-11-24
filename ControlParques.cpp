@@ -241,15 +241,6 @@ int ControlParques::contarArbolesBarrio(int num_barrio) {
 	return contador;
 }
 
-void ControlParques::ordenarEspecies() {
-
-	std::sort(variantes.begin(), variantes.end(),
-		[](const Especie& a, const Especie& b) {
-			return a.get_codigo_especie() < b.get_codigo_especie();
-		});
-}
-
-
 Especie * ControlParques::especieMasComunEnParque(const string &nombreParque) {
 
 	for(map<int, Parque>::iterator i = this->parques.begin(); i != this->parques.end(); i++) {
@@ -265,6 +256,10 @@ unsigned long ControlParques::djb2(const char *str) {
 	int c;
 	while (c = *str++) hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 	return hash;
+}
+
+unsigned int ControlParques::getTamNidos() const {
+	return nidos.size();
 }
 
 
@@ -327,3 +322,17 @@ vector<CajaNido*> ControlParques::cajasEnDistrito(const string& nbre_distrito) {
 
 	return vectorNidos;
 }
+
+void ControlParques::mostrarEstadoTabla() {
+	cout << "------------ESTADO DE LA TABLA HASH------------"<<endl;
+	cout << "Colisiones en la insercion mas costosa: " << arboles.max_Colisiones() << endl;
+	cout << "Veces que se superan las 10 colisiones: " << arboles.numMax10() << endl;
+	cout << "Promedio de colisiones por insercion: " << arboles.promedioColisiones() << endl;
+	cout << "Factor de carga de la tabla: " << arboles.factorCarga() << endl;
+	cout << "Tamanio de la tabla: " << arboles.tamTabla() << endl;
+}
+
+unsigned int ControlParques::getTamTabla() {
+	return arboles.tamTabla();
+}
+

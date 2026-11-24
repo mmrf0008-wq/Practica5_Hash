@@ -1,35 +1,134 @@
+#include <cmath>
+#include <exception>
+#include <iomanip>
 #include <iostream>
-#include "ThashArbol.h"
+#include <string>
+#include <vector>
+//Arreglar caracteres especiales por pantalla
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+
+#include "Parque.h"
+#include "ControlParques.h"
 #include "Arbol.h"
 #include "CajaNido.h"
-#include "ControlParques.h"
-#include "LectorCSV.h"
-#include "Especie.h"
-#include "Parque.h"
-#include "UTM.h"
+using namespace std;
 
-void programa1() {
-
-    try{
+//Rutas de los archivos
+const string RUTA_ESPECIES = "./data/arbolado-especies.csv";
+const string RUTA_PARQUES = "./data/parques.csv";
+const string RUTA_ARBOLES = "./data/arboladoMadrid.csv";
+const string RUTA_CAJAS_NIDO = "./data/cajas-nido.csv";
 
 
-
-
-    }catch (std::out_of_range &e){
-        std::cerr << e.what() << std::endl;
-    }catch (std::runtime_error &e){
-        std::cerr << "Excepcion en fichero: " << e.what() << std::endl;
-    }catch (std::bad_alloc &e){
-        std::cerr << "No hay memoria suficiente para el objeto dinamico" << std::endl;
-    }
+/**
+ * @brief Muestra una posición UTM con sus decimales
+ */
+void mostrarCoordenadas(const UTM &coord) {
+    cout << fixed << setprecision(3) << "(" << coord.getx() << ", " << coord.gety() << ")"
+            << defaultfloat << setprecision(6);
 }
-
-void programa2() {
-
-}
-
 
 int main() {
-    programa1();
-   // programa2();
-}
+    //Arreglar caracteres especiales por pantalla
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+    try {
+        ControlParques control(
+            RUTA_ESPECIES,
+            RUTA_PARQUES,
+            RUTA_ARBOLES,
+            RUTA_CAJAS_NIDO);
+
+        cout << "\nPROGRAMA DE PRUEBA 2\n";
+
+        cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
+        const string ARBOLES_APARTADO_1[] = {"6925456", "6635839", "5222166"};
+        for (const string &assetnum: ARBOLES_APARTADO_1) {
+            Arbol *arbol = control.buscarArbol(assetnum);
+            if (arbol == nullptr) {
+                cout << "\tÁrbol " << assetnum << ": no encontrado" << endl;
+                continue;
+            }
+            cout << "\tÁrbol " << assetnum << ": especie " << arbol->getNombreComun()
+                    << " (" << arbol->getNombreCientifico() << "), altura " << arbol->get_altura()
+                    << " m, parque " << arbol->get_num_parque() << endl;
+        }
+
+        cout << "\nAPARTADO 2: ÁRBOLES CON CAJA NIDO EN EL DISTRITO CENTRO\n";
+        const string DISTRITO = "CENTRO";
+        vector<Arbol *> arbolesConCaja = control.arbolesCajaDistrito(DISTRITO);
+        cout << "\tÁrboles encontrados: " << arbolesConCaja.size() << endl;
+        for (Arbol *arbol: arbolesConCaja) {
+            cout << "\t" << arbol->getAssetNum() << " - " << arbol->getNombreComun()
+                    << " - " << arbol->getNombreDistrito() << endl;
+        }
+
+        cout << "\nAPARTADO 3: CAJAS NIDO ASOCIADAS A UN ÁRBOL\n";
+        unsigned int cajasEnArbol = control.contarCajasEnArbol();
+        cout << "\tCajas nido asociadas a un árbol: " << cajasEnArbol << endl;
+        cout << "\tCajas nido sin asociar: " << control.getTamNidos() - cajasEnArbol << endl;
+
+        cout << "\nAPARTADO 4: CAJAS NIDO EN EL DISTRITO CENTRO\n";
+        vector<CajaNido *> cajasDistrito = control.cajasEnDistrito(DISTRITO);
+        cout << "\tCajas nido encontradas: " << cajasDistrito.size() << endl;
+        for (CajaNido *caja: cajasDistrito) {
+            cout << "\tCaja " << control.idCajaNido(caja) << ": ";
+            if (caja->estaEnArbol()) {
+                cout << "asociada al árbol " << caja->getArbol()->getAssetNum() << endl;
+            } else {
+                cout << "sin asociar" << endl;
+            }
+        }
+
+        cout << "\nAPARTADO 5: DETALLE DE CINCO CAJAS NIDO\n";
+        const unsigned int CAJAS_APARTADO_5[] = {70, 75, 80, 85, 90};
+        for (unsigned int linea: CAJAS_APARTADO_5) {
+            CajaNido *caja = control.buscarCajaNido(linea);
+            if (caja == nullptr) {
+                cout << "\tCaja de la línea " << linea << " no encontrada" << endl << endl;
+                continue;
+            }
+            cout << "\t" << "caja de la línea " << linea << endl;
+            cout << "\t" << "coordenadas de la caja: ";
+            mostrarCoordenadas(caja->getCoordenadas());
+            cout << endl;
+            if (caja->estaEnArbol()) {
+                Arbol *arbol = caja->getArbol();
+                double distancia2 = caja->getCoordenadas().distancia2(arbol->getCoordenadas());
+                cout << "\t" << "identificador del árbol: " << arbol->getAssetNum() << endl;
+                cout << "\t" << "coordenadas del árbol: ";
+                mostrarCoordenadas(arbol->getCoordenadas());
+                cout << endl;
+                cout << "\t" << "distancia: " << fixed << setprecision(2) << sqrt(distancia2) << " m"
+                        << " (al cuadrado " << distancia2 << ")" << defaultfloat << setprecision(6) << endl;
+                cout << "\t" << (distancia2 < 100 ? "cumple" : "NO cumple")
+                        << " la condición de estar a menos de 10 metros" << endl;
+            } else {
+                cout << "\t" << "sin árbol asociado: no hay ninguno a menos de 10 metros" << endl;
+            }
+            cout << endl;
+        }
+
+        cout << "APARTADO 6: PARQUES CON ALGUNA CAJA NIDO\n";
+        vector<Parque *> parquesConCaja = control.parquesConCajaNido();
+        cout << "\tParques encontrados: " << parquesConCaja.size() << endl;
+        for (Parque *pq: parquesConCaja) {
+            cout << "\t" << pq->getCodigoParque() << " - " << pq->getNombreParque() << endl;
+        }
+
+        //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
+        cout << "\nREDISPERSIÓN DE LA TABLA\n";
+        control.redispersar(static_cast<unsigned>(control.getTamTabla() * 1.3));
+        control.mostrarEstadoTabla();
+    } catch (const std::exception &error) {
+        std::cerr << "\nError: " << error.what() << '\n';
+        return 1;
+    }
+
+    return 0;
+};

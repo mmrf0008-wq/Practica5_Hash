@@ -59,6 +59,9 @@ public:
     unsigned int contarCajasEnArbol();
     vector<CajaNido*> cajasEnDistrito(const string& nbre_distrito);
     static unsigned long djb2(const char* str);
+    unsigned int getTamNidos() const;
+    void mostrarEstadoTabla();
+    unsigned int getTamTabla();
 
 };
 
