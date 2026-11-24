@@ -41,7 +41,7 @@ ControlParques::ControlParques(const string &nomFichEspecies, const string &nomF
 
 
 ControlParques::~ControlParques() {
-	this->variantes.clear();
+this->treeName.clear();
 }
 
 

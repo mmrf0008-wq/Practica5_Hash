@@ -17,8 +17,8 @@ class Entrada {
 public:
     unsigned long clave;
     Estado estado;
-    Arbol dato;
-    Entrada(const Estado &marca,const Arbol &dato, unsigned long clave):estado(marca),dato(dato),clave(clave){}
+    Arbol *dato;
+    Entrada(const Estado &marca, Arbol *dato, unsigned long clave):estado(marca),dato(dato),clave(clave){}
     Entrada():estado(LIBRE),dato(),clave(0){}
     ~Entrada(){}
 };

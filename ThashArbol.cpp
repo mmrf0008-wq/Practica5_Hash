@@ -126,11 +126,11 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
     while (!this->tabla.empty() && insertado == false) {
         pos = hash3(clave,intento);     //Calculo una posicion aleatoria con una de las funciones hash
 
-        if(tabla[pos].estado == OCUPADA && tabla[pos].dato.getAssetNum() == arbol.getAssetNum()) {
+        if(tabla[pos].estado == OCUPADA && tabla[pos].dato->getAssetNum() == arbol.getAssetNum()) {
             return false;
         }
         if (tabla[pos].estado == LIBRE || tabla[pos].estado == BORRADO) {    //Compruebo si la posicion está libre
-            tabla[pos].dato = arbol;                            //Si lo está, inserto el nuevo dato
+            tabla[pos].dato = new Arbol(arbol);                            //Si lo está, inserto el nuevo dato
             tabla[pos].clave = clave;
             tabla[pos].estado = OCUPADA;        //Esta posicion pasa de LIBRE a OCUPADA
             tamal++;                            //Aumento el tamaño logico de la tabla
@@ -138,7 +138,14 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
         } else {
             intento++;      //Si no está libre, incrementamos el intento y volvemos a realizar el calculo de la posicion
         }
-        this->sumaColisiones += intento; //aumentamos las colisiones
+
+    }
+    this->sumaColisiones += intento; //aumentamos las colisiones
+    if(intento == 10) { //aumnetamos el max10
+        this->max10++;
+    }
+    if(this->sumaColisiones > this->maxColisiones) { //actualizamos el maximo de colisiones en las inserciones
+        this->maxColisiones = this->sumaColisiones;
     }
 
     return insertado;
@@ -150,7 +157,7 @@ Arbol * ThashArbol::buscar(unsigned long clave) {
     while ( pos < tamaf && tabla[pos].estado != LIBRE) {
         pos = hash3(clave, intento);
         if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
-            return &tabla[pos].dato;
+            return tabla[pos].dato;
         }
         intento++;
     }

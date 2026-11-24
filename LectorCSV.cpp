@@ -345,10 +345,10 @@ bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFicher
 
         long a = ControlParques::djb2(arbol.getAssetNum().c_str());
        arboles.insertar(a, arbol);
-        treeName.insert({arbol.getNombreComun(), &arbol});
+        treeName.insert({arbol.getNombreComun(), new Arbol(arbol)});
 
         bool ligado = false;
-        for(map<int, Parque>::iterator i = parques.begin(); i != parques.end() && !ligado == true; i++) { //ligamos el arbol con un parque
+        for(map<int, Parque>::iterator i = parques.begin(); i != parques.end() && !ligado; i++) { //ligamos el arbol con un parque
 
             if(i->second.getCodigoParque() == arbol.get_num_parque()) {
 

@@ -31,6 +31,25 @@ void mostrarCoordenadas(const UTM &coord) {
             << defaultfloat << setprecision(6);
 }
 
+void programaPrueba1(ControlParques control) {
+
+    ThashArbol arboles = control.getArboles();
+
+    cout << "MAXIMO DE COLISIONES : ";
+    cout << arboles.max_Colisiones() << endl;
+
+    cout << "MAXIMO 10 COLISIONES: ";
+    cout << arboles.numMax10() << endl;
+
+    cout << "PROMEDIO COLISIONES: ";
+    cout << arboles.promedioColisiones() << endl;
+
+    cout << "ESTADO TABLA " << endl;
+     arboles.mostrarEstadoTabla() ;
+
+    cout << " a" ;
+}
+
 int main() {
     //Arreglar caracteres especiales por pantalla
 #ifdef _WIN32
@@ -44,7 +63,9 @@ int main() {
             RUTA_ARBOLES,
             RUTA_CAJAS_NIDO);
 
-        cout << "\nPROGRAMA DE PRUEBA 2\n";
+        cout << "\nPROGRAMA DE PRUEBA 1\n";
+
+        programaPrueba1(control);
 
        /* cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
         const string ARBOLES_APARTADO_1[] = {"6925456", "6635839", "5222166"};
