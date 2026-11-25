@@ -343,27 +343,26 @@ bool  LectorCSV::cargosArbol(ThashArbol & arboles, const std::string &rutaFicher
 
         Arbol arbol = leerArbol_csv(linea, especies);
 
-        long a = ControlParques::djb2(arbol.getAssetNum().c_str());
-       arboles.insertar(a, arbol);
-        treeName.insert({arbol.getNombreComun(), new Arbol(arbol)});
-
         bool ligado = false;
         for(map<int, Parque>::iterator i = parques.begin(); i != parques.end() && !ligado; i++) { //ligamos el arbol con un parque
 
             if(i->second.getCodigoParque() == arbol.get_num_parque()) {
-
                 i->second.insertarArbol(&(arbol));
                 arbol.set_is_into(&i->second);
                 ligado = true;
             }
         }
 
+        unsigned long a = ControlParques::djb2(arbol.getAssetNum().c_str());
+        if(!arboles.insertar(a, arbol)) {
+            cout << "El arbol " << arbol.getAssetNum() << " no se ha podido insertar " << endl;
+        }
+        treeName.insert({arbol.getNombreComun(), new Arbol(arbol)});
     }
-
     return true;
 }
 
-bool LectorCSV::cargarNido(const string &ficheroNido, vector<CajaNido> nidos) {
+bool LectorCSV::cargarNido(const string &ficheroNido, vector<CajaNido> &nidos) {
     filasDescartadas_ = 0;
 
     std::ifstream fichero(ficheroNido);

@@ -35,61 +35,46 @@ void programaPrueba1(ControlParques control) {
 
     ThashArbol arboles = control.getArboles();
 
-    cout << "MAXIMO DE COLISIONES : ";
-    cout << arboles.max_Colisiones() << endl;
-
-    cout << "MAXIMO 10 COLISIONES: ";
-    cout << arboles.numMax10() << endl;
-
-    cout << "PROMEDIO COLISIONES: ";
-    cout << arboles.promedioColisiones() << endl;
-
     cout << "ESTADO TABLA " << endl;
      arboles.mostrarEstadoTabla() ;
 
-    cout << " a" ;
 }
 
-int main() {
-    //Arreglar caracteres especiales por pantalla
-#ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-#endif
-    try {
-        ControlParques control(
-            RUTA_ESPECIES,
-            RUTA_PARQUES,
-            RUTA_ARBOLES,
-            RUTA_CAJAS_NIDO);
+void programaPrueba2(ControlParques control ) {
 
-        cout << "\nPROGRAMA DE PRUEBA 1\n";
+    cout << "Especies cargadas " << control.getVariantes().size() << endl;
+    cout << "Arboles cargadas " << control.getArboles().numElementos() << endl;
+    cout << "Parques cargados " << control.getparques().size() << endl;
+    cout << "Nidos cargados " << control.getTamNidos() << endl;
 
-        programaPrueba1(control);
-
-       /* cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
+     cout << "\nAPARTADO 1: BÚSQUEDA DE ÁRBOLES POR ASSETNUM\n";
         const string ARBOLES_APARTADO_1[] = {"6925456", "6635839", "5222166"};
         for (const string &assetnum: ARBOLES_APARTADO_1) {
             Arbol *arbol = control.buscarArbol(assetnum);
             if (arbol == nullptr) {
-                cout << "\tÁrbol " << assetnum << ": no encontrado" << endl;
+                cout << "Árbol " << assetnum << ": no encontrado" << endl;
                 continue;
             }
-            cout << "\tÁrbol " << assetnum << ": especie " << arbol->getNombreComun()
-                    << " (" << arbol->getNombreCientifico() << "), altura " << arbol->get_altura()
-                    << " m, parque " << arbol->get_num_parque() << endl;
+            cout << "---------" << endl;
+            cout << "Árbol " << assetnum << "\n especie " << arbol->getNombreComun()
+                    << " (" << arbol->getNombreCientifico() << "), \naltura " << arbol->get_altura()
+                    << " m \n parque " << arbol->get_num_parque() << endl;
+
         }
+        //asignación caja nido a arboles
+        control.asginarNidosArboles();
+    const string DISTRITO = "CENTRO";
 
         cout << "\nAPARTADO 2: ÁRBOLES CON CAJA NIDO EN EL DISTRITO CENTRO\n";
-        const string DISTRITO = "CENTRO";
-        vector<Arbol *> arbolesConCaja = control.arbolesCajaDistrito(DISTRITO);
+
+        set<Arbol*> arbolesConCaja = control.arbolesCajaDistrito(DISTRITO);
         cout << "\tÁrboles encontrados: " << arbolesConCaja.size() << endl;
         for (Arbol *arbol: arbolesConCaja) {
             cout << "\t" << arbol->getAssetNum() << " - " << arbol->getNombreComun()
                     << " - " << arbol->getNombreDistrito() << endl;
         }
 
-        cout << "\nAPARTADO 3: CAJAS NIDO ASOCIADAS A UN ÁRBOL\n";
+     cout << "\nAPARTADO 3: CAJAS NIDO ASOCIADAS A UN ÁRBOL\n";
         unsigned int cajasEnArbol = control.contarCajasEnArbol();
         cout << "\tCajas nido asociadas a un árbol: " << cajasEnArbol << endl;
         cout << "\tCajas nido sin asociar: " << control.getTamNidos() - cajasEnArbol << endl;
@@ -97,19 +82,21 @@ int main() {
         cout << "\nAPARTADO 4: CAJAS NIDO EN EL DISTRITO CENTRO\n";
         vector<CajaNido *> cajasDistrito = control.cajasEnDistrito(DISTRITO);
         cout << "\tCajas nido encontradas: " << cajasDistrito.size() << endl;
+        int i =1;
         for (CajaNido *caja: cajasDistrito) {
-            cout << "\tCaja " << control.idCajaNido(caja) << ": ";
+            cout << "\tCaja " << i << ": ";
             if (caja->estaEnArbol()) {
                 cout << "asociada al árbol " << caja->getArbol()->getAssetNum() << endl;
             } else {
                 cout << "sin asociar" << endl;
             }
+            i++;
         }
 
         cout << "\nAPARTADO 5: DETALLE DE CINCO CAJAS NIDO\n";
         const unsigned int CAJAS_APARTADO_5[] = {70, 75, 80, 85, 90};
         for (unsigned int linea: CAJAS_APARTADO_5) {
-            CajaNido *caja = control.buscarCajaNido(linea);
+            CajaNido *caja = control.getNido(linea);
             if (caja == nullptr) {
                 cout << "\tCaja de la línea " << linea << " no encontrada" << endl << endl;
                 continue;
@@ -136,16 +123,40 @@ int main() {
         }
 
         cout << "APARTADO 6: PARQUES CON ALGUNA CAJA NIDO\n";
-        vector<Parque *> parquesConCaja = control.parquesConCajaNido();
-        cout << "\tParques encontrados: " << parquesConCaja.size() << endl;
-        for (Parque *pq: parquesConCaja) {
-            cout << "\t" << pq->getCodigoParque() << " - " << pq->getNombreParque() << endl;
+        vector<Parque *> *parquesConCaja = control.parquesConCajaNido();
+        cout << "\tParques encontrados: " << parquesConCaja->size() << endl;
+
+        Parque *parque;
+       for(int j =0; j < parquesConCaja->size(); j++){
+           parque = ((*parquesConCaja)[j]);
+            cout << "\t" << parque->getCodigoParque() << " - " << parque->getNombreParque() << endl;
         }
 
-        //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
+      /*  //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
         cout << "\nREDISPERSIÓN DE LA TABLA\n";
         control.redispersar(static_cast<unsigned>(control.getTamTabla() * 1.3));
         control.mostrarEstadoTabla();*/
+}
+
+int main() {
+    //Arreglar caracteres especiales por pantalla
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+    try {
+        ControlParques control(
+            RUTA_ESPECIES,
+            RUTA_PARQUES,
+            RUTA_ARBOLES,
+            RUTA_CAJAS_NIDO, 0.68);
+
+        cout << "\nPROGRAMA DE PRUEBA 1\n";
+
+        //programaPrueba1(control);
+        programaPrueba2(control);
+
+
     } catch (const std::exception &error) {
         std::cerr << "\nError: " << error.what() << '\n';
         return 1;

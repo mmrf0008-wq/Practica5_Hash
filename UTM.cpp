@@ -28,7 +28,7 @@ double UTM::gety() const {
 }
 
 double UTM::distancia2(const UTM &otra) {
-    double dx = this->x +otra.x;
-    double dy = this->y + otra.y;
+    double dx = this->x -otra.x;
+    double dy = this->y - otra.y;
     return (dx * dx) + (dy * dy);
 }

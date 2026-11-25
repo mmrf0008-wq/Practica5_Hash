@@ -23,7 +23,7 @@ private:
     vector<CajaNido> nidos;
 
 public:
-    ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFiceroArbol, const string &nomFicheroNido);    //Hay que cargar los ficheros aqui
+    ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFiceroArbol, const string &nomFicheroNido, double factorCarga);    //Hay que cargar los ficheros aqui
     ~ControlParques();
 
     Parque *buscarParque(const string &nombre);
@@ -61,6 +61,10 @@ public:
     unsigned int getTamNidos() const;
     void mostrarEstadoTabla();
     unsigned int getTamTabla();
+
+    void asginarNidosArboles();
+    CajaNido* getNido(int i);
+    vector<Parque*>* parquesConCajaNido();
 
 };
 

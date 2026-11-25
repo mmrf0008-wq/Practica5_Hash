@@ -25,7 +25,7 @@ public:
     bool static  cargarEspecies(map<string, Especie> &especies, const std::string& rutaFichero);
     bool static cargarParques(map<int, Parque> &parques, const std::string &rutaFichero);
     bool  cargosArbol(ThashArbol & arboles, const std::string &rutaFichero, map<int, Parque> &parques, map<string, Especie> &especies, multimap<string,Arbol*> &treeName);
-	bool static cargarNido(const string &ficheroNido, vector<CajaNido> nidos);
+	bool static cargarNido(const string &ficheroNido, vector<CajaNido> &nidos);
 
     std::size_t numeroEspecies() const;
     std::size_t filasDescartadas() const;

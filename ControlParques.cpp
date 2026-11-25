@@ -4,13 +4,15 @@
 
 #include "ControlParques.h"
 #include <algorithm>
+#include <cmath>
 #include <ranges>
 #include <set>
 
 #include "LectorCSV.h"
 
 
-ControlParques::ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFicheroArboles, const string &nomFicheroNido) {
+ControlParques::ControlParques(const string &nomFichEspecies, const string &nomFichParques, const string &nomFicheroArboles, const string &nomFicheroNido
+	, double factorCarga) {
 	if(nomFichEspecies.empty() || nomFichParques.empty()) {
 		throw invalid_argument("[ControlParques]: parametros no validos ");
 	}
@@ -24,7 +26,7 @@ ControlParques::ControlParques(const string &nomFichEspecies, const string &nomF
 	if(!LectorCSV::cargarParques(this->parques, nomFichParques)) {
 		throw std::runtime_error("[ControlParques:cargaParques]: error al abrir fichero ");
 	}
-	this->arboles = ThashArbol(134449, 0.75); //ESTABLECEMOS EL FACTOR CARTA Y LA CANT DE ELEMENTOS
+	this->arboles = ThashArbol(134449, factorCarga); //ESTABLECEMOS EL FACTOR CARTA Y LA CANT DE ELEMENTOS
 
 	cout << "cargados los parques" << endl;
 	if(!a.cargosArbol(this->arboles, nomFicheroArboles, this->parques, this->variantes,treeName)) { // lectura de arboles y ligue entre arbol y parque
@@ -83,7 +85,9 @@ ThashArbol & ControlParques::getArboles() {
 
 
 Arbol *ControlParques::buscarArbol(const string &asnum) {
-	return this->arboles.buscar(djb2(asnum.c_str()));
+	Arbol *a = this->arboles.buscar(djb2(asnum.c_str()));
+
+	return a;
 }
 
 
@@ -341,4 +345,54 @@ void ControlParques::mostrarEstadoTabla() {
 unsigned int ControlParques::getTamTabla() {
 	return arboles.tamTabla();
 }
+
+void ControlParques::asginarNidosArboles() {
+
+	bool asignado = false;
+	double distancia =0;
+	double masCercano= UINT_MAX;
+	Arbol *arbol_masCercano = nullptr;
+	int cont =0;
+
+	for(int j =0; j < this->nidos.size() ; j++) {
+
+		for(multimap<string,Arbol*>::iterator i = this->treeName.begin() ; i != this->treeName.end(); i++) {
+			if(nidos[j].getArbol() == nullptr){
+				distancia = i->second->getCoordenadas().distancia2(nidos[j].getCoordenadas());
+				if(distancia < masCercano) {
+					masCercano =distancia;
+					arbol_masCercano = i->second;
+				}
+			}
+		}
+		if(masCercano < 100) {
+			this->nidos[j].setArbol(arbol_masCercano);
+
+			cont++;
+		}
+	}
+	cout << "se han asignado " <<  cont++ << endl;
+}
+
+
+CajaNido * ControlParques::getNido(int i) {
+	return &this->nidos[i];
+}
+
+vector<Parque *> *ControlParques::parquesConCajaNido() {
+	vector<Parque*> *aux = new vector<Parque*>();
+	Parque *parque;
+
+	for(int i =0;i < this->nidos.size(); i++) {
+		if(nidos[i].getArbol()) {
+			parque = this->nidos[i].getArbol()->getParque();
+			if(parque) {
+				aux->push_back(parque);
+			}
+		}
+	}
+	return aux;
+}
+
+
 

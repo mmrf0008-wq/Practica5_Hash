@@ -39,8 +39,9 @@ Arbol::Arbol(const string &assetnum, int num_parque, int num_distrito, const str
 Arbol::Arbol(const Arbol &orig): assetnum(orig.assetnum),num_parque(orig.num_parque),num_distrito(orig.num_distrito),
                                 nombre_distrito(orig.nombre_distrito),num_barrio(orig.num_barrio),
                                 nombre_barrio(orig.nombre_barrio),coordenadas(orig.coordenadas),perimetro(orig.perimetro),
-                                altura(orig.altura),especie_arbol(orig.especie_arbol),isInto(orig.isInto)
+                                altura(orig.altura),isInto(orig.isInto)
 {
+	especie_arbol= new Especie(*orig.especie_arbol);
 }
 
 /**

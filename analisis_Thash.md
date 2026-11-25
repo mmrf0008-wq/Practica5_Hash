@@ -3,21 +3,22 @@
 * *Alberto Martínez Martín, amm00530@red.ujaen.es*
 * *Maitena María Rosa Fiedler, mmrf0008@red.ujaen.es*
 
-## Tamaño de tabla: xx
-| función | máximo de colisiones | supera 10 colisiones | factor de carga | promedio de colisiones |
-|---------|:--------------------:|:--------------------:|:---------------:|:----------------------:|
-| texto   |        valor         |       valor          |     valor       |                        |
-| texto   |        valor         |       valor          |     valor       |                        |
+## Tamaño de tabla: 206879
+| función | máximo de colisiones |        supera 10 colisiones         | factor de carga | promedio de colisiones |
+|---------|:--------------------:|:-----------------------------------:|:---------------:|:----------------------:|
+| hash3   |          120694       |                 113                 |        0.649839        |     0.897767    |
+| hash2   |       78790          |           64                        |     0.649839           |          0.586069 |
 
-## Tamaño de tabla: yy
+## Tamaño de tabla: 197741
  unción | máximo de colisiones | supera 10 colisiones | factor de carga | promedio de colisiones |
 |--------|:--------------------:|:--------------------:|:---------------:|:----------------------:|
-| hash1  |        valor         |       valor          |     valor       |                        |
-| hash2  |        valor         |       valor          |     valor       |                        |
-| hash3  |        valor         |       valor          |     valor       |                        |
+| hash1  |        643683         |       600          |     0.679869       |      4.78795                  |
+| hash2  |        97112         |       102          |     0.679869       |    0.722355                    |
+| hash3  |        142825         |       187          |     0.679869       |            1.06239            |
 
 ## Justificación de la configuración elegida
-Hemos optado por ...
+Hemos optado por el factor de carga 0.65 y la fucnión hash2 dado que da los valores mas bajos en todas las areas estudiadas. Es aquella que nos 
+da un promedio de colisiones menor y  un menor numero de veces que supera las 10 coalisiones
 
 
 ## Comparación de tiempos dados en milisegundos
