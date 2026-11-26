@@ -153,12 +153,12 @@ int main() {
             RUTA_ESPECIES,
             RUTA_PARQUES,
             RUTA_ARBOLES,
-            RUTA_CAJAS_NIDO, 0.68);
+            RUTA_CAJAS_NIDO, 0.65);
 
         cout << "\nPROGRAMA DE PRUEBA 1\n";
 
-        //programaPrueba1(control);
-        programaPrueba2(control);
+        programaPrueba1(control);
+        //programaPrueba2(control);
 
 
     } catch (const std::exception &error) {

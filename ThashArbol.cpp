@@ -120,7 +120,7 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
     int intento = 0, pos = 0;
 
     while (!this->tabla.empty() && !insertado) {
-        pos = hash2(clave,intento);     //Calculo una posicion aleatoria con una de las funciones hash
+        pos = hash1(clave,intento);     //Calculo una posicion aleatoria con una de las funciones hash
 
         if(tabla[pos].estado == OCUPADA && tabla[pos].dato->getAssetNum() == arbol.getAssetNum()) {
             return false;
