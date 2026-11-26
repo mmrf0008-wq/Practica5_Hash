@@ -67,6 +67,8 @@ public:
 
     set<Parque *> *parquesConCajaNido();
 
+    void redispersar(unsigned int tam);
+
 };
 
 

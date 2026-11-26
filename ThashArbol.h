@@ -61,6 +61,7 @@ public:
     //Metodos auxiliares
     bool esPrimo(const int &num);
     int calculoPrimoMenor();
+    void redispersar(unsigned int tam);
 
 
 

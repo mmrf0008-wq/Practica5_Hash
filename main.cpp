@@ -132,10 +132,14 @@ void programaPrueba2(ControlParques control ) {
             cout << "\t" << parque->getCodigoParque() << " - " << parque->getNombreParque() << endl;
         }
 
-      /*  //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
+        //Solo parejas: redispersión forzada a una tabla un 30 % más grande. Si no se trabaja en pareja, borrar
         cout << "\nREDISPERSIÓN DE LA TABLA\n";
+        cout << "ANTES DE REDISPERSAR " << endl;
+        control.getArboles().mostrarEstadoTabla();
+
+        cout << "DESPUES DE REDISPERSAR " << endl;
         control.redispersar(static_cast<unsigned>(control.getTamTabla() * 1.3));
-        control.mostrarEstadoTabla();*/
+        control.mostrarEstadoTabla();
 }
 
 int main() {

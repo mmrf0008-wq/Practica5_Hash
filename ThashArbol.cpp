@@ -144,6 +144,7 @@ bool ThashArbol::insertar(unsigned long clave, const Arbol &arbol) {    //FALTA 
         this->maxColisiones = this->sumaColisiones;
     }
 
+
     return insertado;
 }
 /**
@@ -180,7 +181,7 @@ bool ThashArbol::borrar(unsigned long clave) {
     int intento = 0, pos = 0;
 
     while (pos < tamaf && tabla[pos].estado != LIBRE) {
-        pos = hash3(clave, intento);
+        pos = hash2(clave, intento);
         if (tabla[pos].estado == OCUPADA && tabla[pos].clave == clave) {
             tabla[pos].clave = 0;
             tabla[pos].estado = BORRADO;
@@ -230,6 +231,34 @@ int ThashArbol::calculoPrimoMenor() {
     }
 
     return -1;
+}
+
+void ThashArbol::redispersar(unsigned int tam) {
+
+    tam = this->PrimoMayor(tam);
+
+    vector<Entrada> tablaAux(tam); //creamos una tabla auxiliar para los datos
+
+    int intento=0;
+    //pasamos los datos a la nueva tabla
+    for(int i =0; i < this->tabla.size(); i++) {
+        intento=0;
+        if(this->tabla[i].estado ==OCUPADA) { // reinsertamos las ocupadas
+            unsigned int nuevoIndice= hash2(this->tabla[i].clave, intento); //utilizamos la dispersión probada
+
+            while (tablaAux[nuevoIndice].estado ==OCUPADA) { //tratamos las colisiones
+                intento++;
+                nuevoIndice = hash2(tabla[i].clave, intento);
+            }
+            if(intento >= 10) this->maxColisiones++;
+            if((unsigned long)intento > this->maxColisiones ) maxColisiones = (unsigned long) intento;
+
+            this->sumaColisiones+= intento;
+            tablaAux[nuevoIndice] = tabla[i]; //una vez encontremos una posicion que no este ocupada la asignamos
+        }
+    }
+    this->tabla = tablaAux; //reasignamos la tabla y el tamaño que ahora posee
+    this->tamaf = tam;
 }
 
 /**

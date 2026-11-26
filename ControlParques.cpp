@@ -501,5 +501,9 @@ set<Parque *> *ControlParques::parquesConCajaNido() {
 	return aux;
 }
 
+void ControlParques::redispersar(unsigned int tam) {
+	this->arboles.redispersar(tam);
+}
+
 
 
