@@ -64,7 +64,8 @@ public:
 
     void asginarNidosArboles();
     CajaNido* getNido(int i);
-    vector<Parque*>* parquesConCajaNido();
+
+    set<Parque *> *parquesConCajaNido();
 
 };
 

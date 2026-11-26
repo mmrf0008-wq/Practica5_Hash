@@ -10,16 +10,16 @@
 
 std::size_t LectorCSV::numeroEspecies_ = 0;
 std::size_t LectorCSV::filasDescartadas_ = 0;
+
 /**
- * @brief Carga el fichero CSV indicado, mostrando cada especie por pantalla.
+ * @brief Carga las especies desde un fichero CSV y las inserta en el mapa indicado.
  *
- * Cada línea se analiza y, si tiene el número de campos esperado, se
- * construye una Especie que se almacena en el VDinamico
- * Las filas con un número de campos
- * distinto del esperado se descartan (ver filasDescartadas()).
+ * Se salta la primera línea de cabecera (eliminando el BOM UTF-8 si existe).
+ * Cada línea se analiza extrayendo su código, nombre común, nombre científico y tipo de planta.
  *
+ * @param especies Mapa (clave: código de especie) donde se almacenan las especies leídas.
  * @param rutaFichero Ruta del fichero CSV a leer.
- * @return true si el fichero se ha podido abrir, false en caso contrario.
+ * @return true si el fichero se ha podido abrir y procesar, false en caso contrario.
  */
 bool LectorCSV::cargarEspecies(map<string, Especie> &especies, const std::string& rutaFichero) {
     filasDescartadas_ = 0;
@@ -74,8 +74,8 @@ bool LectorCSV::cargarEspecies(map<string, Especie> &especies, const std::string
 }
 
 /**
- * @brief Número de especies leídas correctamente.
- * @return Cantidad de especies mostradas durante la última llamada a cargar().
+ * @brief Muestra por salida estándar los datos formateados de una especie.
+ * @param especie Objeto Especie cuyos datos se desean imprimir por consola.
  */
 std::size_t LectorCSV::numeroEspecies() const {
     return numeroEspecies_;

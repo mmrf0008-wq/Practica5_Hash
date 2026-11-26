@@ -123,12 +123,12 @@ void programaPrueba2(ControlParques control ) {
         }
 
         cout << "APARTADO 6: PARQUES CON ALGUNA CAJA NIDO\n";
-        vector<Parque *> *parquesConCaja = control.parquesConCajaNido();
+        set<Parque *> *parquesConCaja = control.parquesConCajaNido();
         cout << "\tParques encontrados: " << parquesConCaja->size() << endl;
 
-        Parque *parque;
-       for(int j =0; j < parquesConCaja->size(); j++){
-           parque = ((*parquesConCaja)[j]);
+
+       for(Parque *parque: *parquesConCaja){
+
             cout << "\t" << parque->getCodigoParque() << " - " << parque->getNombreParque() << endl;
         }
 

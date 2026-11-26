@@ -2,7 +2,7 @@
 
 /**
  * @brief Constructor por defecto de la clase Arbol.
- * Inicializa los atributos numéricos a 0, las cadenas vacías y la especie a nullptr.
+ * Inicializa los atributos numéricos a 0, las cadenas vacías y los punteros a nullptr.
  */
 Arbol::Arbol(): assetnum(""),num_parque(0),num_distrito(0),
                 nombre_distrito(""),num_barrio(0),nombre_barrio(""),
@@ -11,14 +11,14 @@ Arbol::Arbol(): assetnum(""),num_parque(0),num_distrito(0),
 }
 
 /**
- * @brief Constructor parametrizado de la clase Arbol.
+ * @brief Constructor parametrizado completo de la clase Arbol.
  * @param assetnum Identificador único del árbol.
  * @param num_parque Número del parque donde se ubica el árbol.
  * @param num_distrito Número del distrito.
  * @param nombre_distrito Nombre del distrito.
  * @param num_barrio Número del barrio.
  * @param nombre_barrio Nombre del barrio.
- * @param coord Coordenadas del arbol
+ * @param coord Coordenadas geográficas UTM del árbol.
  * @param perimetro Perímetro del tronco del árbol.
  * @param altura Altura del árbol.
  * @param especie Puntero a la especie del árbol (el árbol pasa a ser su propietario y la libera en el destructor).
@@ -45,14 +45,14 @@ Arbol::Arbol(const Arbol &orig): assetnum(orig.assetnum),num_parque(orig.num_par
 }
 
 /**
- * @brief Constructor parametrizado de la clase Arbol.
+ * @brief Constructor parametrizado de la clase Arbol sin punteros asociados.
  * @param assetnum Identificador único del árbol.
  * @param num_parque Número del parque donde se ubica el árbol.
  * @param num_distrito Número del distrito.
  * @param nombre_distrito Nombre del distrito.
  * @param num_barrio Número del barrio.
  * @param nombre_barrio Nombre del barrio.
- * @param coord Coordenadas del arbol
+ * @param coord Coordenadas geográficas UTM del árbol.
  * @param perimetro Perímetro del tronco del árbol.
  * @param altura Altura del árbol.
  */
@@ -91,7 +91,7 @@ Arbol::~Arbol() {
 /**
  * @brief Sobrecarga del operador de asignación.
  * @param arbol Objeto Arbol a asignar.
- * @return Arbol& Referencia al objeto actual modificado.
+ * @return Referencia al objeto actual modificado.
  */
 Arbol & Arbol::operator=(const Arbol &arbol) {
     if (this != &arbol) {
@@ -120,8 +120,7 @@ Arbol & Arbol::operator=(const Arbol &arbol) {
 /**
  * @brief Sobrecarga del operador mayor que (>). Compara según el identificador assetnum.
  * @param arbol Objeto Arbol con el cual comparar.
- * @return true Si el assetnum del árbol actual es alfabéticamente mayor.
- * @return false En caso contrario.
+ * @return true si el assetnum del árbol actual es alfabéticamente mayor, false en caso contrario.
  */
 bool Arbol::operator>(const Arbol &arbol) {
     return this->assetnum > arbol.assetnum;
@@ -130,8 +129,7 @@ bool Arbol::operator>(const Arbol &arbol) {
 /**
  * @brief Sobrecarga del operador menor que (<). Compara según el identificador assetnum.
  * @param arbol Objeto Arbol con el cual comparar.
- * @return true Si el assetnum del árbol actual es alfabéticamente menor.
- * @return false En caso contrario.
+ * @return true si el assetnum del árbol actual es alfabéticamente menor, false en caso contrario.
  */
 bool Arbol::operator<(const Arbol &arbol) {
     return this->assetnum < arbol.assetnum;
@@ -140,8 +138,7 @@ bool Arbol::operator<(const Arbol &arbol) {
 /**
  * @brief Sobrecarga del operador de igualdad (==). Compara dos árboles según su identificador único (assetnum).
  * @param arbol Objeto Arbol con el cual comparar.
- * @return true Si ambos árboles tienen el mismo assetnum.
- * @return false En caso contrario.
+ * @return true si ambos árboles tienen el mismo assetnum, false en caso contrario.
  */
 bool Arbol::operator==(const Arbol &arbol) {
 	return (this->assetnum == arbol.assetnum) ;
@@ -157,15 +154,15 @@ void Arbol::setEspecie(Especie *e) {
 
 /**
  * @brief Obtiene el código de la especie asociada al árbol.
- * @return string Código de la especie.
+ * @return Cadena con el código de la especie.
  */
 string Arbol::getCodigoEspecie() const {
     return especie_arbol->get_codigo_especie();
 }
 
 /**
- * @brief Obtiene el tipo de planta de la especie del árbol.
- * @return TipoPlanta Enumerado o tipo con la categoría de la planta.
+ * @brief Obtiene el tipo de planta de la especie del árbol en formato cadena.
+ * @return Cadena con la representación textual del tipo de planta.
  */
 string Arbol::getTipoEspecie() const {
     return Especie::tptostring(this->especie_arbol->get_tipo_planta());
@@ -221,7 +218,7 @@ void Arbol::set_num_barrio(int num_barrio) {
 
 /**
  * @brief Obtiene el nombre del barrio en el que se ubica el árbol.
- * @return Nombre del barrio.
+ * @return Cadena con el nombre del barrio.
  */
 string Arbol::get_nombre_barrio() const {
     return this->nombre_barrio;
@@ -246,7 +243,7 @@ void Arbol::set_is_into(Parque *is_into) {
 
 /**
  * @brief Obtiene el nombre común de la especie del árbol.
- * @return string Nombre común de la especie.
+ * @return Cadena con el nombre común de la especie.
  */
 string Arbol::getNombreComun() const {
     return especie_arbol->get_nombre_comun();
@@ -261,7 +258,7 @@ void Arbol::setAsNum(const string &asNum) {
 }
 /**
  * @brief Obtiene la altura del árbol.
- * @return float Altura en metros o unidad correspondiente.
+ * @return Valor flotante con la altura en metros.
  */
 float Arbol::get_altura() const {
     return altura;
@@ -289,10 +286,18 @@ int Arbol::get_num_parque() const {
 string Arbol::getNombreCientifico() const {return this->especie_arbol->get_nombre_cientifico();
 }
 
+/**
+ * @brief Obtiene el nombre del distrito en el que se ubica el árbol.
+ * @return Cadena con el nombre del distrito.
+ */
 string Arbol::getNombreDistrito() const {
     return nombre_distrito;
 }
 
+/**
+ * @brief Obtiene las coordenadas geográficas UTM del árbol.
+ * @return Objeto UTM con las coordenadas (X, Y) del árbol.
+ */
 UTM Arbol::getCoordenadas() const {
     return coordenadas;
 }
